@@ -1,6 +1,6 @@
 package com.utcfdn.healthcheck;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,14 +9,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class HealthCheckService {
 
     private final HealthCheckRepository repository;
-
-    @Autowired
-    public HealthCheckService(HealthCheckRepository repository) {
-        this.repository = repository;
-    }
 
     @Transactional
     public void recordHealthCheck(String status) {

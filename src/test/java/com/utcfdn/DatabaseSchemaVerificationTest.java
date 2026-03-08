@@ -3,12 +3,11 @@ package com.utcfdn;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import javax.sql.DataSource;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,9 +21,23 @@ class DatabaseSchemaVerificationTest {
     void verifyTablesExist() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
-            try (ResultSet rs = metaData.getTables(null, "public", "app_health_check", new String[]{"TABLE"})) {
-                assertTrue(rs.next(), "Table 'app_health_check' should exist in the 'public' schema of 'ut_circuit' database");
+            
+            // Try different schema names and case for compatibility (H2 vs PostgreSQL)
+            boolean found = false;
+            String[] schemasToTry = {null, "public", "PUBLIC"};
+            String[] tableNamesToTry = {"app_health_check", "APP_HEALTH_CHECK"};
+            for (String schema : schemasToTry) {
+                for (String tableName : tableNamesToTry) {
+                    try (ResultSet rs = metaData.getTables(null, schema, tableName, new String[]{"TABLE"})) {
+                        if (rs.next()) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found) break;
             }
+            assertTrue(found, "Table 'app_health_check' should exist.");
         }
     }
 }

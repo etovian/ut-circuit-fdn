@@ -1,6 +1,6 @@
 package com.utcfdn.congregation;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,14 +8,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/congregations")
+@RequiredArgsConstructor
 public class CongregationController {
 
     private final CongregationService congregationService;
-
-    @Autowired
-    public CongregationController(CongregationService congregationService) {
-        this.congregationService = congregationService;
-    }
 
     @GetMapping
     public List<CongregationEntity> getAll() {

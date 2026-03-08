@@ -1,20 +1,16 @@
 package com.utcfdn.congregation;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CongregationService {
 
     private final CongregationRepository congregationRepository;
-
-    @Autowired
-    public CongregationService(CongregationRepository congregationRepository) {
-        this.congregationRepository = congregationRepository;
-    }
 
     public List<CongregationEntity> getAllCongregations() {
         return congregationRepository.findAllByOrderByNameAsc();

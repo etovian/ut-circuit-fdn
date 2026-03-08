@@ -65,6 +65,7 @@ This project is a full-stack application consisting of a Spring Boot backend and
 - **File Naming**:
     - Backend: PascalCase for Java classes (`HealthController.java`).
     - Frontend: kebab-case for component selectors (`app-health`), but standalone component filenames are often simple (`health.ts`, `home.ts`).
+- **Environment Interaction**: Connecting directly to the container (e.g., via `docker exec`) to perform non-development functions is preferred over writing ad hoc tests that will be deleted after execution.
 - **Caution**: Avoid use of deprecated features, when possible.
 
 ## Key Files
