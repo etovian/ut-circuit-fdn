@@ -1,8 +1,17 @@
+export interface WorshipTime {
+  title: string;
+  time: string;
+  description: string;
+}
+
 export interface Congregation {
   id?: number;
   name: string;
   description: string;
   mission: string;
-  location?: string; // To be extracted from description if needed or added to DB
-  slug?: string;    // For routing
+  tagline?: string;
+  location?: string;
+  address?: string;
+  googleMapsLink?: string;
+  worshipTimes?: WorshipTime[];
 }
