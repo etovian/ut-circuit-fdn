@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
+import {map, Observable, of, switchMap} from 'rxjs';
 import {Congregation} from './congregation.model';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class CongregationService {
   getCongregationBySlug(slug: string): Observable<Congregation | undefined> {
     return this.getCongregations().pipe(
       map(list => list.find(c => this.getSlug(c.name) === slug)),
-      map(c => c ? this.enrichCongregation(c) : undefined)
+      switchMap(c => c && c.id ? this.getCongregationById(c.id) : of(undefined))
     );
   }
 
@@ -32,11 +32,9 @@ export class CongregationService {
   }
 
   private enrichCongregation(c: Congregation): Congregation {
-    const slug = this.getSlug(c.name);
-
-    // For now, let's hardcode the extra details for Cross of Christ
+    // For now, let's hardcode the extra details for Cross of Christ (ID 1)
     // In a real app, these would come from the database
-    if (slug === 'cross-of-christ') {
+    if (c.id === 1) {
       return {
         ...c,
         tagline: '"Sharing the love of Christ with Bountiful since 1958"',
