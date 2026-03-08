@@ -3,6 +3,9 @@ package com.utcfdn.congregation;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "congregation")
 @Getter
@@ -24,6 +27,14 @@ public class CongregationEntity {
 
     @Column(name = "mission", columnDefinition = "TEXT")
     private String mission;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "congregation_address",
+            joinColumns = @JoinColumn(name = "congregation_id")
+    )
+    @Builder.Default
+    private List<CongregationAddress> addresses = new ArrayList<>();
 
     public CongregationEntity(String name, String description, String mission) {
         this.name = name;

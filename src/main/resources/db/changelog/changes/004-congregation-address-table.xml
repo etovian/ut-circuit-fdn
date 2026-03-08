@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260308-3" author="gemini">
+        <createTable tableName="congregation_address">
+            <column name="congregation_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="congregation_address" columnNames="congregation_id, address_id, address_type" constraintName="pk_congregation_address"/>
+
+        <addForeignKeyConstraint baseTableName="congregation_address" baseColumnNames="congregation_id" constraintName="fk_cong_addr_congregation" referencedTableName="congregation" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="congregation_address" baseColumnNames="address_id" constraintName="fk_cong_addr_address" referencedTableName="address" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
