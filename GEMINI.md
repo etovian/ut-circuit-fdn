@@ -58,13 +58,14 @@ This project is a full-stack application consisting of a Spring Boot backend and
 
 ## Development Conventions
 
-- **Component Style**: Frontend uses Angular standalone components.
+- **Component Style**: Frontend uses Angular standalone components.  Each component should have separate template and style files.
 - **Data Handling**: Frontend utilizes Angular's `signal` for reactive state management.
 - **API Communication**: The backend exposes `/api/health` for monitoring. The frontend uses `HttpClient` with `provideHttpClient()` in `app.config.ts`.
 - **Styling**: Prefers Vanilla CSS with modern oklch colors and gradients, following the boilerplate aesthetic.  Web component style should be modern but reflect the dignity, tradition, and importance of liturgical worship.
 - **File Naming**:
     - Backend: PascalCase for Java classes (`HealthController.java`).
     - Frontend: kebab-case for component selectors (`app-health`), but standalone component filenames are often simple (`health.ts`, `home.ts`).
+- **Caution**: Avoid use of deprecated features, when possible.
 
 ## Key Files
 - `src/main/java/com/utcfdn/UtCircuitFdnApplication.java`: Backend entry point.

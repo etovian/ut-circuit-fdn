@@ -1,0 +1,72 @@
+<main class="main">
+  <div class="content">
+    <div class="left-side">
+      <h1>System Health</h1>
+      <p>Real-time status of the backend circuit foundation. ⚡</p>
+      
+      <div class="status-card" [class.up]="healthStatus()?.status === 'UP'">
+        <div class="status-indicator"></div>
+        <div class="status-text">
+          <span class="label">Backend Status</span>
+          <span class="value">{{ healthStatus()?.status || 'CHECKING...' }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage()" class="error-message">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor">
+          <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/>
+        </svg>
+        {{ errorMessage() }}
+      </div>
+
+      <div class="history-container">
+        <h3>Recent Checks</h3>
+        <div class="table-wrapper" [class.loading]="isRefreshing()">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let check of healthHistory()">
+                <td>{{ check.checkTime | date:'MMM d, y, h:mm:ss a' }}</td>
+                <td>
+                  <span class="status-pill" [class.up]="check.status === 'UP'">
+                    {{ check.status }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="healthHistory().length === 0 && !isRefreshing()">
+                <td colspan="2" class="no-data">No health checks recorded yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" role="separator"></div>
+
+    <div class="right-side">
+      <div class="pill-group">
+        <button class="pill primary" (click)="checkHealth()" [disabled]="isRefreshing()">
+          <span>{{ isRefreshing() ? 'Refreshing...' : 'Refresh Status' }}</span>
+          <svg *ngIf="!isRefreshing()" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18" fill="currentColor">
+            <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/>
+          </svg>
+          <svg *ngIf="isRefreshing()" class="spinner" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18" fill="currentColor">
+            <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/>
+          </svg>
+        </button>
+        <a class="pill" routerLink="/">
+          <span>Back to Home</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18" fill="currentColor">
+            <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
