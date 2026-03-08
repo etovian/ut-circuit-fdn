@@ -1,0 +1,15 @@
+@if (hasPage) {
+  <a [routerLink]="['/', slug]" class="hub-card">
+    <div class="card-accent"></div>
+    <h3>{{ congregation.name }}</h3>
+    <p class="loc">{{ location }}</p>
+    <span class="view-link">View Page →</span>
+  </a>
+} @else {
+  <div class="hub-card disabled">
+    <div class="card-accent secondary"></div>
+    <h3>{{ congregation.name }}</h3>
+    <p class="loc">{{ location }}</p>
+    <span class="view-link">Coming Soon</span>
+  </div>
+}

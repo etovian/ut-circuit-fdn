@@ -36,24 +36,9 @@
         <p>Faithful communities serving Utah families</p>
       </div>
       <div class="congregation-grid">
-        <a routerLink="/cross-of-christ" class="hub-card">
-          <div class="card-accent"></div>
-          <h3>Cross of Christ</h3>
-          <p class="loc">Bountiful, UT</p>
-          <span class="view-link">View Page →</span>
-        </a>
-        <div class="hub-card disabled">
-          <div class="card-accent secondary"></div>
-          <h3>Redeemer</h3>
-          <p class="loc">Salt Lake City, UT</p>
-          <span class="view-link">Coming Soon</span>
-        </div>
-        <div class="hub-card disabled">
-          <div class="card-accent secondary"></div>
-          <h3>First Lutheran</h3>
-          <p class="loc">Tooele, UT</p>
-          <span class="view-link">Coming Soon</span>
-        </div>
+        @for (congregation of congregations(); track congregation.id) {
+          <app-congregation-card [congregation]="congregation"></app-congregation-card>
+        }
       </div>
     </section>
 

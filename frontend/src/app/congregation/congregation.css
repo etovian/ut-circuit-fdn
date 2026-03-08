@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  padding-bottom: 1.5rem;
+  box-sizing: border-box;
+  --lcms-blue: #003366;
+  --lcms-light-blue: #005599;
+  --lcms-gold: #c5a059;
+  --text-light: #666666;
+}
+
+.hub-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.hub-card:hover:not(.disabled) {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--lcms-gold);
+}
+
+.card-accent.secondary {
+  background: var(--gray-400);
+}
+
+.hub-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  color: var(--lcms-blue);
+  margin-top: 0;
+}
+
+.hub-card.disabled h3 {
+  color: var(--gray-400);
+}
+
+.loc {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.view-link {
+  font-weight: 600;
+  color: var(--lcms-light-blue);
+  font-size: 0.875rem;
+  margin-top: auto;
+}
+
+.disabled .view-link {
+  color: var(--gray-400);
+}
