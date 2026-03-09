@@ -50,10 +50,11 @@ export class CongregationService {
 
     // Default enrichment for others
     const locationMatch = c.description?.match(/Located in ([^.]+)/);
+    const city = locationMatch ? locationMatch[1] : 'Utah';
     return {
       ...c,
-      location: locationMatch ? locationMatch[1] : 'Utah',
-      tagline: `Serving the ${locationMatch ? locationMatch[1] : 'Utah'} community`,
+      location: city,
+      tagline: `Serving the ${city} community`,
       worshipTimes: [
         { title: 'Sunday Service', time: '10:00 AM', description: 'Join us for worship and fellowship.' }
       ]

@@ -17,7 +17,10 @@ export class CongregationComponent {
     return this.congregation.name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
   }
 
-  get location(): string {
+  get city(): string {
+    if (this.congregation.addresses && this.congregation.addresses.length > 0) {
+      return this.congregation.addresses[0].address.city;
+    }
     if (this.congregation.description?.startsWith('Located in ')) {
       return this.congregation.description
         .replace('Located in ', '')
