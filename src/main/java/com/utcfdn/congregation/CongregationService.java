@@ -2,6 +2,7 @@ package com.utcfdn.congregation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +13,12 @@ public class CongregationService {
 
     private final CongregationRepository congregationRepository;
 
+    @Transactional(readOnly = true)
     public List<CongregationEntity> getAllCongregations() {
         return congregationRepository.findAllByOrderByNameAsc();
     }
 
+    @Transactional(readOnly = true)
     public Optional<CongregationEntity> getCongregationById(Long id) {
         return congregationRepository.findById(id);
     }
