@@ -19,6 +19,7 @@ public class CongregationMapper {
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .mission(entity.getMission())
+                .bannerPhotoDirectory(entity.getBannerPhotoDirectory())
                 .addresses(entity.getAddresses() != null ? 
                     entity.getAddresses().stream()
                         .map(this::toDto)

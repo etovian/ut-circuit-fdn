@@ -28,6 +28,9 @@ public class CongregationEntity {
     @Column(name = "mission", columnDefinition = "TEXT")
     private String mission;
 
+    @Column(name = "banner_photo_directory")
+    private String bannerPhotoDirectory;
+
     @ElementCollection
     @CollectionTable(
             name = "congregation_address",

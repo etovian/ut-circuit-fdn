@@ -16,5 +16,6 @@ public class CongregationDto {
     private String name;
     private String description;
     private String mission;
+    private String bannerPhotoDirectory;
     private List<CongregationAddressDto> addresses;
 }

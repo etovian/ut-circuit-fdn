@@ -5,11 +5,7 @@
       <div class="hero-content">
         <span class="location-tag">{{ church.location || 'Utah' }}</span>
         <h1>{{ church.name }}</h1>
-        <p class="tagline">{{ church.tagline }}</p>
-        <div class="cta-group">
-          <a href="#worship" class="pill primary">Worship Times</a>
-          <a href="#about" class="pill secondary">Our Mission</a>
-        </div>
+        <p class="tagline">{{ church.mission }}</p>
       </div>
     </div>
   </header>
@@ -37,7 +33,6 @@
       <div class="about-grid">
         <div class="about-text">
           <h2>About Our Congregation</h2>
-          <p>{{ church.mission }}</p>
           <p>{{ church.description }}</p>
         </div>
         <div class="location-info">
