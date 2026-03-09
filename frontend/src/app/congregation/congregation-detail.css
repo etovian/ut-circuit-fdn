@@ -188,13 +188,27 @@ h2 {
 .location-info h3 {
   color: var(--gold);
   margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.address-entry {
+  margin-bottom: 2rem;
+}
+
+.address-type {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1rem;
+  color: var(--gold);
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
 }
 
 address {
   font-style: normal;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   line-height: 1.6;
-  margin-bottom: 2rem;
 }
 
 .map-link {

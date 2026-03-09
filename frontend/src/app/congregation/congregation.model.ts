@@ -26,7 +26,5 @@ export interface Congregation {
   addresses?: CongregationAddress[];
   tagline?: string;
   location?: string;
-  address?: string; // Legacy field for hardcoded data, keep for now
-  googleMapsLink?: string;
   worshipTimes?: WorshipTime[];
 }
