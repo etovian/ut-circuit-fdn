@@ -36,6 +36,10 @@ export class EventService {
     return this.http.delete<void>(`${this.apiUrl}/templates/${id}`);
   }
 
+  cancelSeriesFrom(templateId: number, startFrom: string): Observable<EventTemplate> {
+    return this.http.patch<EventTemplate>(`${this.apiUrl}/templates/${templateId}/cancel-from?startFrom=${startFrom}`, {});
+  }
+
   cancelInstance(instanceId: number): Observable<ScheduledEventInstance> {
     return this.http.patch<ScheduledEventInstance>(`${this.apiUrl}/scheduled/${instanceId}/cancel`, {});
   }

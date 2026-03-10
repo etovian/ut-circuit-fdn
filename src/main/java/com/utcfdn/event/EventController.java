@@ -66,6 +66,15 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/templates/{id}/cancel-from")
+    public ResponseEntity<EventTemplateDto> cancelSeriesFrom(
+            @PathVariable Long id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startFrom) {
+        return eventService.cancelSeriesFrom(id, startFrom)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PatchMapping("/scheduled/{instanceId}/cancel")
     public ResponseEntity<EventOccurrenceDto> cancelInstance(@PathVariable Long instanceId) {
         return eventService.cancelInstance(instanceId)

@@ -31,6 +31,10 @@ export class EventManagement {
   currentTemplate = signal<Partial<EventTemplate>>({});
   currentInstance = signal<Partial<ScheduledEventInstance>>({});
 
+  // End Condition State
+  endConditionType = signal<'never' | 'date' | 'count'>('never');
+  occurrenceCount = signal<number>(1);
+
   // Calendar State
   currentMonth = signal(new Date());
   calendarDays = signal<any[]>([]);
@@ -150,11 +154,24 @@ export class EventManagement {
     if (template) {
       this.currentTemplate.set({ ...template });
       const rrule = template.recurrenceRule;
+      
+      // Parse Days
       const daysMatch = rrule.match(/BYDAY=([^;]+)/);
       if (daysMatch) {
         this.selectedDays.set(daysMatch[1].split(','));
       } else {
         this.selectedDays.set([]);
+      }
+
+      // Parse End Condition
+      const countMatch = rrule.match(/COUNT=(\d+)/);
+      if (template.endDate) {
+        this.endConditionType.set('date');
+      } else if (countMatch) {
+        this.endConditionType.set('count');
+        this.occurrenceCount.set(parseInt(countMatch[1], 10));
+      } else {
+        this.endConditionType.set('never');
       }
     } else {
       this.currentTemplate.set({
@@ -166,6 +183,7 @@ export class EventManagement {
         isActive: true
       });
       this.selectedDays.set(['SU']);
+      this.endConditionType.set('never');
     }
     this.isEditingTemplate.set(true);
   }
@@ -179,10 +197,20 @@ export class EventManagement {
   saveTemplate() {
     const t = this.currentTemplate() as EventTemplate;
     
-    // Build RRULE from selected days
-    if (this.selectedDays().length > 0) {
-      t.recurrenceRule = `FREQ=WEEKLY;BYDAY=${this.selectedDays().join(',')}`;
+    // 1. Build Base RRULE
+    let rrule = `FREQ=WEEKLY;BYDAY=${this.selectedDays().join(',')}`;
+
+    // 2. Handle End Condition
+    if (this.endConditionType() === 'count') {
+      rrule += `;COUNT=${this.occurrenceCount()}`;
+      t.endDate = undefined;
+    } else if (this.endConditionType() === 'date') {
+      // Keep t.endDate as set by the input
+    } else {
+      t.endDate = undefined;
     }
+    
+    t.recurrenceRule = rrule;
 
     const obs = t.id 
       ? this.eventService.updateTemplate(t.id, t)
@@ -226,6 +254,17 @@ export class EventManagement {
   cancelInstance(id: number) {
     if (confirm('Cancel this specific event occurrence?')) {
       this.eventService.cancelInstance(id).subscribe(() => {
+        if (this.congregation()?.id) {
+          this.loadData(this.congregation()!.id!);
+        }
+      });
+    }
+  }
+
+  cancelSeriesFrom(templateId: number, startFrom: string) {
+    if (confirm('Are you sure you want to cancel this and ALL future occurrences in this series?')) {
+      this.eventService.cancelSeriesFrom(templateId, startFrom).subscribe(() => {
+        this.isEditingInstance.set(false);
         if (this.congregation()?.id) {
           this.loadData(this.congregation()!.id!);
         }

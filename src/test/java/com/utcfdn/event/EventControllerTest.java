@@ -144,4 +144,23 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.name").value("Overridden Name"))
                 .andExpect(jsonPath("$.override").value(true));
     }
+
+    @Test
+    void testCancelSeriesFrom() throws Exception {
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Template")
+                .congregation(testCongregation)
+                .startDate(LocalDate.of(2025, 1, 1))
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY")
+                .isActive(true)
+                .build());
+
+        LocalDateTime cancelFrom = LocalDateTime.of(2025, 1, 15, 10, 0);
+
+        mockMvc.perform(patch("/api/events/templates/" + template.getId() + "/cancel-from")
+                .param("startFrom", cancelFrom.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.endDate").value("2025-01-14"));
+    }
 }

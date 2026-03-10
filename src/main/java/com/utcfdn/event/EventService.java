@@ -86,6 +86,25 @@ public class EventService {
     }
 
     @Transactional
+    public Optional<EventTemplateDto> cancelSeriesFrom(Long templateId, LocalDateTime startFrom) {
+        return templateRepository.findById(templateId).map(template -> {
+            // 1. Set the end date to the day before the first cancelled occurrence
+            template.setEndDate(startFrom.toLocalDate().minusDays(1));
+            templateRepository.save(template);
+
+            // 2. Delete all future materialized instances that are now beyond the end date
+            List<ScheduledEventInstanceEntity> futureInstances = instanceRepository.findByTemplateIdAndStartTimeGreaterThanEqual(
+                    templateId, startFrom);
+            instanceRepository.deleteAll(futureInstances);
+
+            // 3. Trigger resync (optional but good practice)
+            schedulingTaskProvider.ifAvailable(EventSchedulingTask::scheduleEventsForNext30Days);
+            
+            return mapToTemplateDto(template);
+        });
+    }
+
+    @Transactional
     public Optional<EventOccurrenceDto> cancelInstance(Long instanceId) {
         return instanceRepository.findById(instanceId).map(instance -> {
             instance.setCancelled(true);
@@ -216,8 +235,18 @@ public class EventService {
 
             while (it.hasNext()) {
                 DateTime next = it.nextDateTime();
+                
+                // Stop if we've passed the requested calendar range end
                 if (next.after(rangeEndDT)) {
                     break;
+                }
+
+                // Stop if we've passed the template's defined end date
+                if (template.getEndDate() != null) {
+                    LocalDateTime nextLdt = toLocalDateTime(next);
+                    if (nextLdt.toLocalDate().isAfter(template.getEndDate())) {
+                        break;
+                    }
                 }
 
                 LocalDateTime originalStart = toLocalDateTime(next);

@@ -211,4 +211,73 @@ class EventServiceTest {
         assertEquals(1, results.size(), "Only the non-cancelled instance should be returned");
         assertEquals("Active Event", results.get(0).getName());
     }
+
+    @Test
+    void testCancelSeriesFrom() {
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Weekly Series")
+                .congregation(testCongregation)
+                .startDate(startDate)
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY;BYDAY=MO") // Mondays
+                .durationMinutes(60)
+                .isActive(true)
+                .build());
+
+        // Materialize some instances
+        LocalDateTime instance1Time = LocalDateTime.of(2025, 1, 6, 10, 0); // Monday
+        LocalDateTime instance2Time = LocalDateTime.of(2025, 1, 13, 10, 0); // Monday
+        LocalDateTime instance3Time = LocalDateTime.of(2025, 1, 20, 10, 0); // Monday
+
+        instanceRepository.save(ScheduledEventInstanceEntity.builder()
+                .template(template).startTime(instance1Time).originalStartTime(instance1Time).endTime(instance1Time.plusHours(1)).name("Instance 1").build());
+        instanceRepository.save(ScheduledEventInstanceEntity.builder()
+                .template(template).startTime(instance2Time).originalStartTime(instance2Time).endTime(instance2Time.plusHours(1)).name("Instance 2").build());
+        instanceRepository.save(ScheduledEventInstanceEntity.builder()
+                .template(template).startTime(instance3Time).originalStartTime(instance3Time).endTime(instance3Time.plusHours(1)).name("Instance 3").build());
+
+        // Cancel series starting from Instance 2
+        Optional<EventTemplateDto> result = eventService.cancelSeriesFrom(template.getId(), instance2Time);
+
+        assertTrue(result.isPresent());
+        // End date should be day before instance 2 (Sunday Jan 12)
+        assertEquals(LocalDate.of(2025, 1, 12), result.get().getEndDate());
+
+        // Check materialized instances
+        List<ScheduledEventInstanceEntity> remaining = instanceRepository.findAll().stream()
+                .filter(i -> i.getTemplate().getId().equals(template.getId()))
+                .toList();
+        
+        assertEquals(1, remaining.size(), "Only instance 1 should remain");
+        assertEquals("Instance 1", remaining.get(0).getName());
+    }
+
+    @Test
+    void testGenerateOccurrencesRespectsEndDate() {
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate endDate = LocalDate.of(2025, 1, 15);
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Limited Series")
+                .congregation(testCongregation)
+                .startDate(startDate)
+                .endDate(endDate)
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY;BYDAY=MO") // Jan 6, 13, 20...
+                .durationMinutes(60)
+                .isActive(true)
+                .build());
+
+        // Request occurrences for the whole month of January
+        LocalDateTime startRange = LocalDateTime.of(2025, 1, 1, 0, 0);
+        LocalDateTime endRange = LocalDateTime.of(2025, 1, 31, 23, 59);
+
+        List<EventOccurrenceDto> occurrences = eventService.getOccurrences(testCongregation.getId(), startRange, endRange);
+
+        // Should find Jan 6 and Jan 13, but NOT Jan 20 because it's after Jan 15
+        assertEquals(2, occurrences.size(), "Should only return occurrences before or on the end date");
+        assertEquals(LocalDateTime.of(2025, 1, 6, 10, 0), occurrences.get(0).getStartTime());
+        assertEquals(LocalDateTime.of(2025, 1, 13, 10, 0), occurrences.get(1).getStartTime());
+    }
 }
+

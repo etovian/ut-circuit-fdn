@@ -33,7 +33,14 @@
         @for (t of templates(); track t.id) {
         <div class="table-row">
           <div class="col"><strong>{{ t.name }}</strong></div>
-          <div class="col">{{ t.recurrenceRule }} at {{ t.startTime }}</div>
+          <div class="col">
+            {{ t.recurrenceRule }} at {{ t.startTime }}
+            @if (t.endDate) {
+              <div class="meta">Until {{ t.endDate | date:'mediumDate' }}</div>
+            } @else if (t.recurrenceRule.includes('COUNT=')) {
+              <div class="meta">Limited series</div>
+            }
+          </div>
           <div class="col">{{ t.location || 'Church' }}</div>
           <div class="col actions">
             <button class="btn icon" (click)="editTemplate(t)" title="Edit Pattern">✎</button>
@@ -121,6 +128,33 @@
         </div>
 
         <div class="form-group">
+          <label>End Condition</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="endType" value="never" [(ngModel)]="endConditionType"> Never Ends
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="endType" value="date" [(ngModel)]="endConditionType"> Ends On Date
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="endType" value="count" [(ngModel)]="endConditionType"> Ends After...
+            </label>
+          </div>
+          
+          @if (endConditionType() === 'date') {
+            <div class="nested-input">
+              <input type="date" [(ngModel)]="currentTemplate().endDate" name="endDate" required>
+            </div>
+          }
+          @if (endConditionType() === 'count') {
+            <div class="nested-input inline">
+              <input type="number" [(ngModel)]="occurrenceCount" name="occurrenceCount" required min="1" style="width: 80px;">
+              <span>occurrences</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
           <label>Duration (minutes)</label>
           <input type="number" [(ngModel)]="currentTemplate().durationMinutes" name="duration" required>
         </div>
@@ -163,8 +197,11 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn secondary" (click)="isEditingInstance.set(false)">Cancel</button>
-          <button type="button" class="btn danger" (click)="cancelInstance(currentInstance().id!); isEditingInstance.set(false)">Cancel Event</button>
+          <button type="button" class="btn secondary" (click)="isEditingInstance.set(false)">Close</button>
+          <div class="danger-actions">
+            <button type="button" class="btn danger outline" (click)="cancelInstance(currentInstance().id!); isEditingInstance.set(false)">Cancel Only This</button>
+            <button type="button" class="btn danger" (click)="cancelSeriesFrom(currentInstance().templateId!, currentInstance().startTime!)">Cancel All Remaining</button>
+          </div>
           <button type="submit" class="btn primary" [disabled]="!instanceForm.valid">Update This Date</button>
         </div>
       </form>

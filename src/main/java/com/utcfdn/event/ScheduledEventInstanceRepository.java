@@ -18,6 +18,9 @@ public interface ScheduledEventInstanceRepository extends JpaRepository<Schedule
     List<ScheduledEventInstanceEntity> findByTemplateIdInAndStartTimeBetween(
             List<Long> templateIds, LocalDateTime start, LocalDateTime end);
 
+    List<ScheduledEventInstanceEntity> findByTemplateIdAndStartTimeGreaterThanEqual(
+            Long templateId, LocalDateTime start);
+
     List<ScheduledEventInstanceEntity> findByTemplateCongregationIdAndStartTimeBetween(
             Long congregationId, LocalDateTime start, LocalDateTime end);
 
