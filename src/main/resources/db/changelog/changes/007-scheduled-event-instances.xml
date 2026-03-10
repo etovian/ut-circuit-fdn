@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="007-scheduled-event-instances" author="gemini">
+        <createTable tableName="scheduled_event_instance">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="event_template_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_scheduled_event_template" referencedTableName="event_template" referencedColumnNames="id"/>
+            </column>
+            <column name="start_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="location" type="VARCHAR(255)"/>
+            <column name="is_override" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!-- Unique constraint to prevent duplicate scheduling of the same original occurrence -->
+        <addUniqueConstraint tableName="scheduled_event_instance" columnNames="event_template_id, start_time" constraintName="uq_event_instance_start"/>
+    </changeSet>
+
+</databaseChangeLog>

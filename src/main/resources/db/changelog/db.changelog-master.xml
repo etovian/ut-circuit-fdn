@@ -10,5 +10,6 @@
     <include file="db/changelog/changes/003-address-table.xml"/>
     <include file="db/changelog/changes/004-congregation-address-table.xml"/>
     <include file="db/changelog/changes/005-add-banner-photo-directory.xml"/>
-
-</databaseChangeLog>
+    <include file="db/changelog/changes/006-event-tables.xml"/>
+    <include file="db/changelog/changes/007-scheduled-event-instances.xml"/>
+    </databaseChangeLog>
