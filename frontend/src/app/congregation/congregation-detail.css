@@ -124,37 +124,95 @@ h2 {
   color: var(--navy);
 }
 
-.worship-grid {
+.events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
-.worship-card {
+.event-card {
   background: white;
-  padding: 2.5rem;
+  padding: 0;
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  border-bottom: 4px solid var(--burgundy);
+  display: flex;
+  overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
-.worship-card h3 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: var(--burgundy);
+.event-card:hover {
+  transform: translateY(-4px);
 }
 
-.time {
-  font-size: 2rem;
+.event-date {
+  background: var(--burgundy);
+  color: white;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  text-align: center;
+}
+
+.event-date .day {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.event-date .date {
+  font-size: 1.25rem;
   font-weight: 700;
-  margin: 0.5rem 0;
-  color: var(--gray-900);
+  line-height: 1.2;
 }
 
-.desc {
+.event-info {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.event-info h3 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.event-info .time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--burgundy);
+  margin: 0.25rem 0 0.75rem 0;
+}
+
+.event-info .desc {
+  font-size: 0.9375rem;
   color: var(--gray-700);
-  line-height: 1.6;
-  margin-bottom: 0;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.location-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  margin: 0;
+  opacity: 0.8;
+}
+
+.no-events {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  text-align: center;
+  color: var(--gray-700);
+  font-style: italic;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .horizontal-divider {

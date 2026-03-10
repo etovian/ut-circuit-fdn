@@ -28,3 +28,16 @@ export interface Congregation {
   location?: string;
   worshipTimes?: WorshipTime[];
 }
+
+export interface ScheduledEvent {
+  id: number;
+  templateId: number;
+  startTime: string;
+  originalStartTime: string;
+  durationMinutes: number;
+  name: string;
+  description: string;
+  location: string;
+  cancelled: boolean;
+  override: boolean;
+}

@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable, of, switchMap} from 'rxjs';
-import {Congregation} from './congregation.model';
+import {Congregation, ScheduledEvent} from './congregation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,10 @@ export class CongregationService {
       map(list => list.find(c => this.getSlug(c.name) === slug)),
       switchMap(c => c && c.id ? this.getCongregationById(c.id) : of(undefined))
     );
+  }
+
+  getScheduledEventsNextSevenDays(congregationId: number): Observable<ScheduledEvent[]> {
+    return this.http.get<ScheduledEvent[]>(`/api/events/scheduled/next-seven-days?congregationId=${congregationId}`);
   }
 
   private getSlug(name: string): string {

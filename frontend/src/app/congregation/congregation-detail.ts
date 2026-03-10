@@ -2,7 +2,7 @@ import {Component, computed, inject, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {CongregationService} from './congregation.service';
-import {Congregation} from './congregation.model';
+import {Congregation, ScheduledEvent} from './congregation.model';
 
 @Component({
   selector: 'app-congregation-detail',
@@ -16,6 +16,7 @@ export class CongregationDetail {
   private congregationService = inject(CongregationService);
 
   congregation = signal<Congregation | undefined>(undefined);
+  scheduledEvents = signal<ScheduledEvent[]>([]);
 
   googleMapsUrl = computed(() => {
     const church = this.congregation();
@@ -35,6 +36,11 @@ export class CongregationDetail {
       if (slug) {
         this.congregationService.getCongregationBySlug(slug).subscribe(data => {
           this.congregation.set(data);
+          if (data && data.id) {
+            this.congregationService.getScheduledEventsNextSevenDays(data.id).subscribe(events => {
+              this.scheduledEvents.set(events);
+            });
+          }
         });
       }
     });

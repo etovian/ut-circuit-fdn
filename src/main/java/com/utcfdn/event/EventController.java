@@ -34,4 +34,12 @@ public class EventController {
 
         return eventService.getScheduledInstances(congregationId, start, end);
     }
+
+    @GetMapping("/scheduled/next-seven-days")
+    public List<EventOccurrenceDto> getScheduledEventsNextSevenDays(
+            @RequestParam Long congregationId) {
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusDays(7);
+        return eventService.getScheduledInstances(congregationId, start, end);
+    }
 }
