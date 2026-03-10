@@ -23,6 +23,7 @@ export interface Congregation {
   name: string;
   description: string;
   mission: string;
+  bannerPhotos?: string[];
   addresses?: CongregationAddress[];
   tagline?: string;
   location?: string;

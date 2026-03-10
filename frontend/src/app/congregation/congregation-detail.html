@@ -1,6 +1,6 @@
 @if (congregation(); as church) {
 <div class="church-container">
-  <header class="hero">
+  <header class="hero" [style.background-image]="'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(' + currentPhotoUrl() + ')'">
     <div class="hero-overlay">
       <div class="hero-content">
         <span class="location-tag">{{ church.location || 'Utah' }}</span>
