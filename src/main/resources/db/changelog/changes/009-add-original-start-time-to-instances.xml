@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260309-3" author="gemini">
+        <addColumn tableName="scheduled_event_instance">
+            <column name="original_start_time" type="TIMESTAMP"/>
+        </addColumn>
+        
+        <update tableName="scheduled_event_instance">
+            <column name="original_start_time" valueComputed="start_time"/>
+            <where>original_start_time IS NULL</where>
+        </update>
+
+        <addNotNullConstraint tableName="scheduled_event_instance" columnName="original_start_time" columnDataType="TIMESTAMP"/>
+    </changeSet>
+
+</databaseChangeLog>

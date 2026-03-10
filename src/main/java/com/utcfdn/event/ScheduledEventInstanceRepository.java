@@ -5,10 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ScheduledEventInstanceRepository extends JpaRepository<ScheduledEventInstanceEntity, Long> {
     boolean existsByTemplateIdAndStartTime(Long templateId, LocalDateTime startTime);
+
+    Optional<ScheduledEventInstanceEntity> findByTemplateIdAndOriginalStartTime(Long templateId, LocalDateTime originalStartTime);
 
     List<ScheduledEventInstanceEntity> findByTemplateIdInAndStartTimeBetween(
             List<Long> templateIds, LocalDateTime start, LocalDateTime end);

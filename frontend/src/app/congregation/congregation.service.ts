@@ -31,7 +31,7 @@ export class CongregationService {
     return this.http.get<ScheduledEvent[]>(`/api/events/scheduled/next-seven-days?congregationId=${congregationId}`);
   }
 
-  private getSlug(name: string): string {
+  getSlug(name: string): string {
     return name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
   }
 

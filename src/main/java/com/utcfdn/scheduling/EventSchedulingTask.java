@@ -23,32 +23,52 @@ public class EventSchedulingTask {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(30);
 
-        log.info("Starting event scheduling task for range: {} to {}", start, end);
+        log.info("Starting event synchronization for range: {} to {}", start, end);
 
-        // Fetch all active templates (passing null for congregationId gets all)
+        // Fetch all active templates
         List<EventOccurrenceDto> occurrences = eventService.getOccurrences(null, start, end);
 
-        int scheduledCount = 0;
+        int newCount = 0;
+        int updateCount = 0;
+
         for (EventOccurrenceDto dto : occurrences) {
-            if (!instanceRepository.existsByTemplateIdAndStartTime(dto.getTemplateId(), dto.getStartTime())) {
-                EventTemplateEntity template = templateRepository.findById(dto.getTemplateId())
-                        .orElseThrow(() -> new RuntimeException("Template not found: " + dto.getTemplateId()));
+            instanceRepository.findByTemplateIdAndOriginalStartTime(dto.getTemplateId(), dto.getOriginalStartTime())
+                    .ifPresentOrElse(
+                            existing -> {
+                                // Only update if it's NOT an override and NOT cancelled
+                                if (!existing.isOverride() && !existing.isCancelled()) {
+                                    existing.setStartTime(dto.getStartTime());
+                                    existing.setEndTime(dto.getStartTime().plusMinutes(dto.getDurationMinutes()));
+                                    existing.setName(dto.getName());
+                                    existing.setDescription(dto.getDescription());
+                                    existing.setLocation(dto.getLocation());
+                                    instanceRepository.save(existing);
+                                    // Note: we don't increment updateCount here to avoid noise, 
+                                    // but we could if we wanted to track actual changes.
+                                }
+                            },
+                            () -> {
+                                // Create new instance
+                                EventTemplateEntity template = templateRepository.findById(dto.getTemplateId())
+                                        .orElseThrow(() -> new RuntimeException("Template not found: " + dto.getTemplateId()));
 
-                ScheduledEventInstanceEntity instance = ScheduledEventInstanceEntity.builder()
-                        .template(template)
-                        .startTime(dto.getStartTime())
-                        .endTime(dto.getStartTime().plusMinutes(dto.getDurationMinutes()))
-                        .name(dto.getName())
-                        .description(dto.getDescription())
-                        .location(dto.getLocation())
-                        .isOverride(dto.isOverride())
-                        .build();
+                                ScheduledEventInstanceEntity instance = ScheduledEventInstanceEntity.builder()
+                                        .template(template)
+                                        .startTime(dto.getStartTime())
+                                        .originalStartTime(dto.getOriginalStartTime())
+                                        .endTime(dto.getStartTime().plusMinutes(dto.getDurationMinutes()))
+                                        .name(dto.getName())
+                                        .description(dto.getDescription())
+                                        .location(dto.getLocation())
+                                        .isOverride(false)
+                                        .isCancelled(false)
+                                        .build();
 
-                instanceRepository.save(instance);
-                scheduledCount++;
-            }
+                                instanceRepository.save(instance);
+                            }
+                    );
         }
 
-        log.info("Scheduled {} new event instances.", scheduledCount);
+        log.info("Synchronization complete.");
     }
 }

@@ -45,6 +45,11 @@
           <p>No events scheduled for the next seven days.</p>
         </div>
       }
+      <div class="admin-actions">
+        <a [routerLink]="['/admin/congregation', congregationServicePublic.getSlug(church.name), 'events']" class="pill secondary">
+          Manage Events
+        </a>
+      </div>
     </section>
 
     <div class="horizontal-divider"></div>

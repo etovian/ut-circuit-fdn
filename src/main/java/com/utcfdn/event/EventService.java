@@ -1,9 +1,12 @@
 package com.utcfdn.event;
 
+import com.utcfdn.congregation.CongregationRepository;
+import com.utcfdn.scheduling.EventSchedulingTask;
 import lombok.RequiredArgsConstructor;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.rfc5545.recur.RecurrenceRuleIterator;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +24,104 @@ public class EventService {
     private final EventTemplateRepository templateRepository;
     private final EventOccurrenceRepository occurrenceRepository;
     private final ScheduledEventInstanceRepository instanceRepository;
+    private final CongregationRepository congregationRepository;
+    private final ObjectProvider<EventSchedulingTask> schedulingTaskProvider;
+
+    @Transactional(readOnly = true)
+    public List<EventTemplateDto> getTemplates(Long congregationId) {
+        List<EventTemplateEntity> templates;
+        if (congregationId != null) {
+            templates = templateRepository.findByCongregationIdAndIsActiveTrue(congregationId);
+        } else {
+            templates = templateRepository.findByIsActiveTrue();
+        }
+        return templates.stream().map(this::mapToTemplateDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public EventTemplateDto createTemplate(EventTemplateDto dto) {
+        EventTemplateEntity entity = EventTemplateEntity.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .location(dto.getLocation())
+                .congregation(congregationRepository.findById(dto.getCongregationId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid congregation ID")))
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .startTime(dto.getStartTime())
+                .durationMinutes(dto.getDurationMinutes())
+                .recurrenceRule(dto.getRecurrenceRule())
+                .isActive(true)
+                .build();
+        
+        EventTemplateDto result = mapToTemplateDto(templateRepository.save(entity));
+        schedulingTaskProvider.ifAvailable(EventSchedulingTask::scheduleEventsForNext30Days);
+        return result;
+    }
+
+    @Transactional
+    public Optional<EventTemplateDto> updateTemplate(Long id, EventTemplateDto dto) {
+        return templateRepository.findById(id).map(existing -> {
+            existing.setName(dto.getName());
+            existing.setDescription(dto.getDescription());
+            existing.setLocation(dto.getLocation());
+            existing.setStartDate(dto.getStartDate());
+            existing.setEndDate(dto.getEndDate());
+            existing.setStartTime(dto.getStartTime());
+            existing.setDurationMinutes(dto.getDurationMinutes());
+            existing.setRecurrenceRule(dto.getRecurrenceRule());
+            existing.setActive(dto.isActive());
+            EventTemplateDto result = mapToTemplateDto(templateRepository.save(existing));
+            schedulingTaskProvider.ifAvailable(EventSchedulingTask::scheduleEventsForNext30Days);
+            return result;
+        });
+    }
+
+    @Transactional
+    public void deleteTemplate(Long id) {
+        templateRepository.findById(id).ifPresent(template -> {
+            template.setActive(false);
+            templateRepository.save(template);
+            schedulingTaskProvider.ifAvailable(EventSchedulingTask::scheduleEventsForNext30Days);
+        });
+    }
+
+    @Transactional
+    public Optional<EventOccurrenceDto> cancelInstance(Long instanceId) {
+        return instanceRepository.findById(instanceId).map(instance -> {
+            instance.setCancelled(true);
+            return mapToDto(instanceRepository.save(instance));
+        });
+    }
+
+    @Transactional
+    public Optional<EventOccurrenceDto> overrideInstance(Long instanceId, EventOccurrenceDto dto) {
+        return instanceRepository.findById(instanceId).map(instance -> {
+            instance.setName(dto.getName());
+            instance.setDescription(dto.getDescription());
+            instance.setLocation(dto.getLocation());
+            instance.setStartTime(dto.getStartTime());
+            instance.setEndTime(dto.getStartTime().plusMinutes(dto.getDurationMinutes()));
+            instance.setOverride(true);
+            return mapToDto(instanceRepository.save(instance));
+        });
+    }
+
+    private EventTemplateDto mapToTemplateDto(EventTemplateEntity entity) {
+        return EventTemplateDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .location(entity.getLocation())
+                .congregationId(entity.getCongregation().getId())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .startTime(entity.getStartTime())
+                .durationMinutes(entity.getDurationMinutes())
+                .recurrenceRule(entity.getRecurrenceRule())
+                .isActive(entity.isActive())
+                .build();
+    }
 
     @Transactional(readOnly = true)
     public List<EventOccurrenceDto> getScheduledInstances(Long congregationId, LocalDateTime start, LocalDateTime end) {
@@ -31,6 +133,7 @@ public class EventService {
         }
 
         return instances.stream()
+                .filter(i -> !i.isCancelled())
                 .map(this::mapToDto)
                 .sorted((a, b) -> a.getStartTime().compareTo(b.getStartTime()))
                 .collect(Collectors.toList());
@@ -41,12 +144,12 @@ public class EventService {
                 .id(entity.getId())
                 .templateId(entity.getTemplate().getId())
                 .startTime(entity.getStartTime())
-                .originalStartTime(entity.getStartTime()) // In this simplified model, we use start_time as original
+                .originalStartTime(entity.getOriginalStartTime())
                 .durationMinutes((int) java.time.Duration.between(entity.getStartTime(), entity.getEndTime()).toMinutes())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .location(entity.getLocation())
-                .isCancelled(false)
+                .isCancelled(entity.isCancelled())
                 .isOverride(entity.isOverride())
                 .build();
     }

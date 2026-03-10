@@ -12,4 +12,6 @@
     <include file="db/changelog/changes/005-add-banner-photo-directory.xml"/>
     <include file="db/changelog/changes/006-event-tables.xml"/>
     <include file="db/changelog/changes/007-scheduled-event-instances.xml"/>
+    <include file="db/changelog/changes/008-add-cancelled-flag-to-instances.xml"/>
+    <include file="db/changelog/changes/009-add-original-start-time-to-instances.xml"/>
     </databaseChangeLog>

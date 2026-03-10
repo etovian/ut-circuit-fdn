@@ -12,9 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -24,113 +24,191 @@ class EventServiceTest {
     private EventService eventService;
 
     @Autowired
+    private CongregationRepository congregationRepository;
+
+    @Autowired
     private EventTemplateRepository templateRepository;
 
     @Autowired
-    private EventOccurrenceRepository occurrenceRepository;
-
-    @Autowired
-    private CongregationRepository congregationRepository;
+    private ScheduledEventInstanceRepository instanceRepository;
 
     private CongregationEntity testCongregation;
 
     @BeforeEach
     void setUp() {
         testCongregation = congregationRepository.save(CongregationEntity.builder()
-                .name("Test Church")
+                .name("Test Congregation")
                 .description("Test Description")
                 .mission("Test Mission")
                 .build());
     }
 
     @Test
-    void testGenerateWeeklyOccurrences() {
-        // Create a weekly Sunday service template starting Jan 1, 2024 (Monday)
-        // First Sunday will be Jan 7, 2024
-        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
-                .name("Sunday Service")
-                .congregation(testCongregation)
-                .startDate(LocalDate.of(2024, 1, 1))
+    void testCreateTemplate() {
+        EventTemplateDto dto = EventTemplateDto.builder()
+                .name("Weekly Service")
+                .description("Sunday Service")
+                .congregationId(testCongregation.getId())
+                .startDate(LocalDate.now())
                 .startTime(LocalTime.of(10, 0))
                 .durationMinutes(60)
                 .recurrenceRule("FREQ=WEEKLY;BYDAY=SU")
+                .build();
+
+        EventTemplateDto created = eventService.createTemplate(dto);
+
+        assertNotNull(created.getId());
+        assertEquals("Weekly Service", created.getName());
+        assertTrue(created.isActive());
+    }
+
+    @Test
+    void testUpdateTemplate() {
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Original Name")
+                .congregation(testCongregation)
+                .startDate(LocalDate.now())
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY")
                 .isActive(true)
                 .build());
 
-        // Fetch occurrences for January 2024
-        LocalDateTime start = LocalDateTime.of(2024, 1, 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(2024, 1, 31, 23, 59);
+        EventTemplateDto updateDto = EventTemplateDto.builder()
+                .name("Updated Name")
+                .congregationId(testCongregation.getId())
+                .startDate(LocalDate.now())
+                .startTime(LocalTime.of(11, 0))
+                .durationMinutes(90)
+                .recurrenceRule("FREQ=DAILY")
+                .isActive(true)
+                .build();
+
+        Optional<EventTemplateDto> updated = eventService.updateTemplate(template.getId(), updateDto);
+
+        assertTrue(updated.isPresent());
+        assertEquals("Updated Name", updated.get().getName());
+        assertEquals(LocalTime.of(11, 0), updated.get().getStartTime());
+    }
+
+    @Test
+    void testDeleteTemplateSoftDeletes() {
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("To Be Deleted")
+                .congregation(testCongregation)
+                .startDate(LocalDate.now())
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY")
+                .isActive(true)
+                .build());
+
+        eventService.deleteTemplate(template.getId());
+
+        EventTemplateEntity found = templateRepository.findById(template.getId()).orElseThrow();
+        assertFalse(found.isActive(), "Template should be soft-deleted (isActive = false)");
+    }
+
+    @Test
+    void testCancelInstance() {
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Pattern")
+                .congregation(testCongregation)
+                .startDate(LocalDate.now())
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY")
+                .build());
+
+        ScheduledEventInstanceEntity instance = instanceRepository.save(ScheduledEventInstanceEntity.builder()
+                .template(template)
+                .startTime(LocalDateTime.now().plusDays(1))
+                .originalStartTime(LocalDateTime.now().plusDays(1))
+                .endTime(LocalDateTime.now().plusDays(1).plusHours(1))
+                .name("Instance")
+                .isCancelled(false)
+                .build());
+
+        Optional<EventOccurrenceDto> result = eventService.cancelInstance(instance.getId());
+
+        assertTrue(result.isPresent());
+        assertTrue(result.get().isCancelled());
+
+        ScheduledEventInstanceEntity updatedInstance = instanceRepository.findById(instance.getId()).orElseThrow();
+        assertTrue(updatedInstance.isCancelled());
+    }
+
+    @Test
+    void testOverrideInstance() {
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Pattern")
+                .congregation(testCongregation)
+                .startDate(LocalDate.now())
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY")
+                .build());
+
+        ScheduledEventInstanceEntity instance = instanceRepository.save(ScheduledEventInstanceEntity.builder()
+                .template(template)
+                .startTime(LocalDateTime.now().plusDays(1))
+                .originalStartTime(LocalDateTime.now().plusDays(1))
+                .endTime(LocalDateTime.now().plusDays(1).plusHours(1))
+                .name("Standard Name")
+                .isOverride(false)
+                .build());
+
+        EventOccurrenceDto overrideDto = EventOccurrenceDto.builder()
+                .name("Special Holiday Service")
+                .startTime(instance.getStartTime().plusHours(2)) // Move it 2 hours later
+                .durationMinutes(120)
+                .description("Special Description")
+                .build();
+
+        Optional<EventOccurrenceDto> overridden = eventService.overrideInstance(instance.getId(), overrideDto);
+
+        assertTrue(overridden.isPresent());
+        assertEquals("Special Holiday Service", overridden.get().getName());
+        assertTrue(overridden.get().isOverride());
+
+        ScheduledEventInstanceEntity updated = instanceRepository.findById(instance.getId()).orElseThrow();
+        assertEquals("Special Holiday Service", updated.getName());
+        assertTrue(updated.isOverride());
+    }
+
+    @Test
+    void testGetScheduledInstancesFiltersCancelled() {
+        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
+                .name("Template")
+                .congregation(testCongregation)
+                .startDate(LocalDate.now())
+                .startTime(LocalTime.of(10, 0))
+                .recurrenceRule("FREQ=WEEKLY")
+                .build());
+
+        LocalDateTime now = LocalDateTime.now();
         
-        List<EventOccurrenceDto> occurrences = eventService.getOccurrences(testCongregation.getId(), start, end);
-
-        // There are 4 Sundays in January 2024: 7, 14, 21, 28
-        assertEquals(4, occurrences.size());
-        assertEquals(LocalDateTime.of(2024, 1, 7, 10, 0), occurrences.get(0).getStartTime());
-        assertEquals(LocalDateTime.of(2024, 1, 28, 10, 0), occurrences.get(3).getStartTime());
-    }
-
-    @Test
-    void testOccurrenceOverride() {
-        // 1. Create Template
-        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
-                .name("Standard Service")
-                .congregation(testCongregation)
-                .startDate(LocalDate.of(2024, 1, 1))
-                .startTime(LocalTime.of(10, 0))
-                .durationMinutes(60)
-                .recurrenceRule("FREQ=WEEKLY;BYDAY=SU")
-                .isActive(true)
-                .build());
-
-        // 2. Create Override for the first occurrence (Jan 7)
-        LocalDateTime originalStart = LocalDateTime.of(2024, 1, 7, 10, 0);
-        occurrenceRepository.save(EventOccurrenceEntity.builder()
+        // Save one active and one cancelled instance
+        instanceRepository.save(ScheduledEventInstanceEntity.builder()
                 .template(template)
-                .originalStartTime(originalStart)
-                .newStartTime(LocalDateTime.of(2024, 1, 7, 9, 30)) // Move to 9:30
-                .overrideName("Special Service")
+                .startTime(now.plusDays(1))
+                .originalStartTime(now.plusDays(1))
+                .endTime(now.plusDays(1).plusHours(1))
+                .name("Active Event")
+                .isCancelled(false)
                 .build());
 
-        // 3. Fetch
-        LocalDateTime start = LocalDateTime.of(2024, 1, 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(2024, 1, 10, 23, 59);
-        List<EventOccurrenceDto> occurrences = eventService.getOccurrences(testCongregation.getId(), start, end);
-
-        assertEquals(1, occurrences.size());
-        EventOccurrenceDto occ = occurrences.get(0);
-        assertEquals("Special Service", occ.getName());
-        assertEquals(LocalDateTime.of(2024, 1, 7, 9, 30), occ.getStartTime());
-        assertEquals(originalStart, occ.getOriginalStartTime());
-        assertTrue(occ.isOverride());
-    }
-
-    @Test
-    void testOccurrenceCancellation() {
-        // 1. Create Template
-        EventTemplateEntity template = templateRepository.save(EventTemplateEntity.builder()
-                .name("Will Be Cancelled")
-                .congregation(testCongregation)
-                .startDate(LocalDate.of(2024, 1, 1))
-                .startTime(LocalTime.of(10, 0))
-                .durationMinutes(60)
-                .recurrenceRule("FREQ=WEEKLY;BYDAY=SU")
-                .isActive(true)
-                .build());
-
-        // 2. Cancel the first occurrence
-        occurrenceRepository.save(EventOccurrenceEntity.builder()
+        instanceRepository.save(ScheduledEventInstanceEntity.builder()
                 .template(template)
-                .originalStartTime(LocalDateTime.of(2024, 1, 7, 10, 0))
+                .startTime(now.plusDays(2))
+                .originalStartTime(now.plusDays(2))
+                .endTime(now.plusDays(2).plusHours(1))
+                .name("Cancelled Event")
                 .isCancelled(true)
                 .build());
 
-        // 3. Fetch for first two weeks
-        LocalDateTime start = LocalDateTime.of(2024, 1, 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(2024, 1, 14, 23, 59);
-        List<EventOccurrenceDto> occurrences = eventService.getOccurrences(testCongregation.getId(), start, end);
+        List<EventOccurrenceDto> results = eventService.getScheduledInstances(
+                testCongregation.getId(), 
+                now.minusDays(1), 
+                now.plusDays(5));
 
-        // Jan 7 is cancelled, so only Jan 14 remains
-        assertEquals(1, occurrences.size());
-        assertEquals(LocalDateTime.of(2024, 1, 14, 10, 0), occurrences.get(0).getStartTime());
+        assertEquals(1, results.size(), "Only the non-cancelled instance should be returned");
+        assertEquals("Active Event", results.get(0).getName());
     }
 }

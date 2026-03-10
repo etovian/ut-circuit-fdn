@@ -98,6 +98,19 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Use secondary pill styling but visible on white background */
+.events-section .pill.secondary {
+  background: var(--gray-100, oklch(95% 0.01 85));
+  color: var(--navy);
+  border: 1px solid var(--gray-400);
+}
+
+.admin-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
 .pill:hover {
   transform: translateY(-2px);
   filter: brightness(1.1);
@@ -282,12 +295,28 @@ address {
   border-top: 1px solid rgba(255,255,255,0.2);
 }
 
-.church-footer {
-  padding: 4rem 2rem;
-  text-align: center;
-  background: white;
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
 }
 
+.admin-link {
+  color: var(--gray-400);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.admin-link:hover {
+  color: var(--burgundy);
+}
+
+.church-footer {
+  padding: 4rem 2rem;
+  background: white;
+}
 .back-link {
   display: inline-flex;
   align-items: center;

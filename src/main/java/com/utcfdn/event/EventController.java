@@ -2,10 +2,8 @@ package com.utcfdn.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,5 +39,44 @@ public class EventController {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(7);
         return eventService.getScheduledInstances(congregationId, start, end);
+    }
+
+    // --- Administrative Endpoints ---
+
+    @GetMapping("/templates")
+    public List<EventTemplateDto> getTemplates(@RequestParam(required = false) Long congregationId) {
+        return eventService.getTemplates(congregationId);
+    }
+
+    @PostMapping("/templates")
+    public EventTemplateDto createTemplate(@RequestBody EventTemplateDto dto) {
+        return eventService.createTemplate(dto);
+    }
+
+    @PutMapping("/templates/{id}")
+    public ResponseEntity<EventTemplateDto> updateTemplate(@PathVariable Long id, @RequestBody EventTemplateDto dto) {
+        return eventService.updateTemplate(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/templates/{id}")
+    public ResponseEntity<Void> deleteTemplate(@PathVariable Long id) {
+        eventService.deleteTemplate(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/scheduled/{instanceId}/cancel")
+    public ResponseEntity<EventOccurrenceDto> cancelInstance(@PathVariable Long instanceId) {
+        return eventService.cancelInstance(instanceId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/scheduled/{instanceId}/override")
+    public ResponseEntity<EventOccurrenceDto> overrideInstance(@PathVariable Long instanceId, @RequestBody EventOccurrenceDto dto) {
+        return eventService.overrideInstance(instanceId, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

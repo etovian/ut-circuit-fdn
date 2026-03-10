@@ -1,0 +1,175 @@
+@if (congregation(); as church) {
+<div class="admin-container">
+  <header class="admin-header">
+    <div class="header-info">
+      <a [routerLink]="['/', route.snapshot.params['slug']]" class="back-link">← Back to Site</a>
+      <h1>Event Management</h1>
+      <p class="subtitle">{{ church.name }}</p>
+    </div>
+    
+    <div class="view-toggle">
+      <button [class.active]="viewMode() === 'calendar'" (click)="viewMode.set('calendar')">Event Calendar</button>
+      <button [class.active]="viewMode() === 'templates'" (click)="viewMode.set('templates')">Recurring Patterns</button>
+    </div>
+  </header>
+
+  <main class="admin-content">
+    
+    <!-- Pattern Management -->
+    @if (viewMode() === 'templates') {
+    <section>
+      <div class="section-actions">
+        <h2>Recurring Patterns</h2>
+        <button class="btn primary" (click)="editTemplate()">+ Create New Pattern</button>
+      </div>
+
+      <div class="data-table">
+        <div class="table-row header">
+          <div class="col">Event Name</div>
+          <div class="col">Schedule</div>
+          <div class="col">Location</div>
+          <div class="col actions">Actions</div>
+        </div>
+        @for (t of templates(); track t.id) {
+        <div class="table-row">
+          <div class="col"><strong>{{ t.name }}</strong></div>
+          <div class="col">{{ t.recurrenceRule }} at {{ t.startTime }}</div>
+          <div class="col">{{ t.location || 'Church' }}</div>
+          <div class="col actions">
+            <button class="btn icon" (click)="editTemplate(t)" title="Edit Pattern">✎</button>
+            <button class="btn icon delete" (click)="deleteTemplate(t.id!)" title="Deactivate">✕</button>
+          </div>
+        </div>
+        }
+      </div>
+    </section>
+    }
+
+    <!-- Visual Calendar -->
+    @if (viewMode() === 'calendar') {
+    <section class="calendar-section">
+      <div class="calendar-controls">
+        <div class="month-nav">
+          <button class="btn icon" (click)="changeMonth(-1)">‹</button>
+          <h2>{{ currentMonth() | date:'MMMM yyyy' }}</h2>
+          <button class="btn icon" (click)="changeMonth(1)">›</button>
+        </div>
+        <button class="btn secondary" (click)="editTemplate()">+ New Recurring Event</button>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="calendar-header">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div class="calendar-body">
+          @for (day of calendarDays(); track day.date) {
+            <div class="calendar-day" [class.padding]="day.isPadding" [class.today]="day.isToday">
+              <span class="day-number">{{ day.date | date:'d' }}</span>
+              <div class="day-events">
+                @for (event of day.events; track event.id) {
+                  <div class="calendar-event" 
+                       [class.override]="event.isOverride" 
+                       (click)="editInstance(event)"
+                       [title]="event.name">
+                    <span class="event-time">{{ event.startTime | date:'h:mm a' }}</span>
+                    <span class="event-name">{{ event.name }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+    }
+  </main>
+
+  <!-- Template Edit Modal -->
+  @if (isEditingTemplate()) {
+  <div class="modal-overlay">
+    <div class="modal">
+      <h3>{{ currentTemplate().id ? 'Edit' : 'Create' }} Event Pattern</h3>
+      <form (ngSubmit)="saveTemplate()" #templateForm="ngForm" class="admin-form">
+        <div class="form-group">
+          <label>Event Name</label>
+          <input type="text" [(ngModel)]="currentTemplate().name" name="name" required placeholder="e.g. Sunday Morning Worship">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Effective Date</label>
+            <input type="date" [(ngModel)]="currentTemplate().startDate" name="startDate" required>
+          </div>
+          <div class="form-group">
+            <label>Start Time</label>
+            <input type="time" [(ngModel)]="currentTemplate().startTime" name="startTime" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Repeats Every</label>
+          <div class="day-picker">
+            @for (day of daysOfWeek; track day.value) {
+              <button type="button" 
+                class="day-btn" 
+                [class.selected]="selectedDays().includes(day.value)"
+                (click)="toggleDay(day.value)">
+                {{ day.label }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Duration (minutes)</label>
+          <input type="number" [(ngModel)]="currentTemplate().durationMinutes" name="duration" required>
+        </div>
+
+        <div class="form-group">
+          <label>Location (Optional)</label>
+          <input type="text" [(ngModel)]="currentTemplate().location" name="location" placeholder="Defaults to church address">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" (click)="isEditingTemplate.set(false)">Cancel</button>
+          <button type="submit" class="btn primary" [disabled]="!templateForm.valid || selectedDays().length === 0">Save Pattern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Instance Override Modal -->
+  @if (isEditingInstance()) {
+  <div class="modal-overlay">
+    <div class="modal">
+      <h3>Edit Specific Occurrence</h3>
+      <p class="modal-subtitle">Changing this will only affect the event on {{ currentInstance().startTime | date:'fullDate' }}.</p>
+      
+      <form (ngSubmit)="saveInstanceOverride()" #instanceForm="ngForm" class="admin-form">
+        <div class="form-group">
+          <label>Event Name</label>
+          <input type="text" [(ngModel)]="currentInstance().name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Start Time</label>
+          <input type="datetime-local" [ngModel]="currentInstance().startTime?.substring(0, 16)" (ngModelChange)="currentInstance().startTime = $event" name="startTime" required>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="currentInstance().description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" (click)="isEditingInstance.set(false)">Cancel</button>
+          <button type="button" class="btn danger" (click)="cancelInstance(currentInstance().id!); isEditingInstance.set(false)">Cancel Event</button>
+          <button type="submit" class="btn primary" [disabled]="!instanceForm.valid">Update This Date</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>
+}

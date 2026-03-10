@@ -27,6 +27,9 @@ public class ScheduledEventInstanceEntity {
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
+    @Column(name = "original_start_time", nullable = false)
+    private LocalDateTime originalStartTime;
+
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
@@ -40,4 +43,7 @@ public class ScheduledEventInstanceEntity {
 
     @Column(name = "is_override", nullable = false)
     private boolean isOverride;
+
+    @Column(name = "is_cancelled", nullable = false)
+    private boolean isCancelled;
 }

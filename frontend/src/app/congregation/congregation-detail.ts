@@ -18,6 +18,7 @@ const PHOTO_ROTATION_INTERVAL_MS = 5000;
 export class CongregationDetail implements OnDestroy {
   private route = inject(ActivatedRoute);
   private congregationService = inject(CongregationService);
+  public congregationServicePublic = this.congregationService; // For template access
 
   congregation = signal<Congregation | undefined>(undefined);
   scheduledEvents = signal<ScheduledEvent[]>([]);
