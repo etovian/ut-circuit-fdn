@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventTemplateRepository templateRepository;
-    private final EventOccurrenceRepository occurrenceRepository;
     private final ScheduledEventInstanceRepository instanceRepository;
     private final CongregationRepository congregationRepository;
     private final ObjectProvider<EventSchedulingTask> schedulingTaskProvider;
@@ -165,18 +164,17 @@ public class EventService {
             return new ArrayList<>();
         }
 
-        // 2. Fetch overrides/cancellations for the range and these templates
+        // 2. Fetch overrides/cancellations for the range and these templates from the materialized table
         List<Long> templateIds = templates.stream().map(EventTemplateEntity::getId).collect(Collectors.toList());
-        List<EventOccurrenceEntity> overrides = occurrenceRepository.findAll().stream() // Simplified for now, in practice use a custom query
-                .filter(o -> templateIds.contains(o.getTemplate().getId()))
-                .filter(o -> !o.getOriginalStartTime().isBefore(start) && !o.getOriginalStartTime().isAfter(end))
-                .collect(Collectors.toList());
+        List<ScheduledEventInstanceEntity> materialized = instanceRepository.findByTemplateIdInAndStartTimeBetween(templateIds, start, end);
 
-        // Group overrides by (templateId, originalStartTime) for easy lookup
-        Map<String, EventOccurrenceEntity> overrideMap = overrides.stream()
+        // Group by (templateId, originalStartTime)
+        Map<String, ScheduledEventInstanceEntity> overrideMap = materialized.stream()
+                .filter(i -> i.isOverride() || i.isCancelled())
                 .collect(Collectors.toMap(
                         o -> o.getTemplate().getId() + "_" + o.getOriginalStartTime().toString(),
-                        o -> o
+                        o -> o,
+                        (existing, replacement) -> existing
                 ));
 
         List<EventOccurrenceDto> allOccurrences = new ArrayList<>();
@@ -194,7 +192,7 @@ public class EventService {
             EventTemplateEntity template,
             LocalDateTime rangeStart,
             LocalDateTime rangeEnd,
-            Map<String, EventOccurrenceEntity> overrideMap) {
+            Map<String, ScheduledEventInstanceEntity> overrideMap) {
 
         List<EventOccurrenceDto> occurrences = new ArrayList<>();
 
@@ -224,7 +222,7 @@ public class EventService {
 
                 LocalDateTime originalStart = toLocalDateTime(next);
                 String key = template.getId() + "_" + originalStart.toString();
-                EventOccurrenceEntity override = overrideMap.get(key);
+                ScheduledEventInstanceEntity override = overrideMap.get(key);
 
                 if (override != null) {
                     if (!override.isCancelled()) {
@@ -236,24 +234,24 @@ public class EventService {
                 }
             }
         } catch (Exception e) {
-            // Log error and handle gracefully (e.g., skip this template)
+            // Log error and handle gracefully
             System.err.println("Error parsing RRULE for template " + template.getId() + ": " + e.getMessage());
         }
 
         return occurrences;
     }
 
-    private EventOccurrenceDto mapToDto(EventTemplateEntity template, LocalDateTime originalStart, EventOccurrenceEntity override) {
+    private EventOccurrenceDto mapToDto(EventTemplateEntity template, LocalDateTime originalStart, ScheduledEventInstanceEntity override) {
         return EventOccurrenceDto.builder()
                 .templateId(template.getId())
                 .originalStartTime(originalStart)
-                .startTime(override != null && override.getNewStartTime() != null ? override.getNewStartTime() : originalStart)
-                .durationMinutes(template.getDurationMinutes())
-                .name(override != null && override.getOverrideName() != null ? override.getOverrideName() : template.getName())
-                .description(override != null && override.getOverrideDescription() != null ? override.getOverrideDescription() : template.getDescription())
-                .location(template.getLocation())
+                .startTime(override != null ? override.getStartTime() : originalStart)
+                .durationMinutes(override != null ? (int) java.time.Duration.between(override.getStartTime(), override.getEndTime()).toMinutes() : template.getDurationMinutes())
+                .name(override != null ? override.getName() : template.getName())
+                .description(override != null ? override.getDescription() : template.getDescription())
+                .location(override != null ? override.getLocation() : template.getLocation())
                 .isCancelled(override != null && override.isCancelled())
-                .isOverride(override != null)
+                .isOverride(override != null && override.isOverride())
                 .build();
     }
 

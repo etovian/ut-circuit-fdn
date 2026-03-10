@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface ScheduledEventInstanceRepository extends JpaRepository<ScheduledEventInstanceEntity, Long> {
     boolean existsByTemplateIdAndStartTime(Long templateId, LocalDateTime startTime);
 
+    Optional<ScheduledEventInstanceEntity> findByTemplateIdAndStartTime(Long templateId, LocalDateTime startTime);
+
     Optional<ScheduledEventInstanceEntity> findByTemplateIdAndOriginalStartTime(Long templateId, LocalDateTime originalStartTime);
 
     List<ScheduledEventInstanceEntity> findByTemplateIdInAndStartTimeBetween(

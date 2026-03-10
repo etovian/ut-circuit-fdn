@@ -14,4 +14,5 @@
     <include file="db/changelog/changes/007-scheduled-event-instances.xml"/>
     <include file="db/changelog/changes/008-add-cancelled-flag-to-instances.xml"/>
     <include file="db/changelog/changes/009-add-original-start-time-to-instances.xml"/>
+    <include file="db/changelog/changes/010-drop-event-occurrence-table.xml"/>
     </databaseChangeLog>
