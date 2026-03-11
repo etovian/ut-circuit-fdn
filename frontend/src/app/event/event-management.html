@@ -70,13 +70,16 @@
         </div>
         <div class="calendar-body">
           @for (day of calendarDays(); track day.date) {
-            <div class="calendar-day" [class.padding]="day.isPadding" [class.today]="day.isToday">
+            <div class="calendar-day" 
+                 [class.padding]="day.isPadding" 
+                 [class.today]="day.isToday"
+                 (click)="editTemplate(undefined, day.date)">
               <span class="day-number">{{ day.date | date:'d' }}</span>
               <div class="day-events">
                 @for (event of day.events; track event.id) {
                   <div class="calendar-event" 
                        [class.override]="event.isOverride" 
-                       (click)="editInstance(event)"
+                       (click)="editInstance(event); $event.stopPropagation()"
                        [title]="event.name">
                     <span class="event-time">{{ event.startTime | date:'h:mm a' }}</span>
                     <span class="event-name">{{ event.name }}</span>

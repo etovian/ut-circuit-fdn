@@ -150,7 +150,7 @@ export class EventManagement {
     }
   }
 
-  editTemplate(template?: EventTemplate) {
+  editTemplate(template?: EventTemplate, prefillDate?: Date) {
     if (template) {
       this.currentTemplate.set({ ...template });
       const rrule = template.recurrenceRule;
@@ -174,16 +174,31 @@ export class EventManagement {
         this.endConditionType.set('never');
       }
     } else {
+      const baseDate = prefillDate || new Date();
+      const year = baseDate.getFullYear();
+      const month = String(baseDate.getMonth() + 1).padStart(2, '0');
+      const day = String(baseDate.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
+
+      const dayNames = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+      const dayOfWeek = dayNames[baseDate.getDay()];
+
       this.currentTemplate.set({
         congregationId: this.congregation()?.id,
-        startDate: new Date().toISOString().split('T')[0],
+        startDate: dateStr,
         startTime: '10:00:00',
         durationMinutes: 60,
-        recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU',
+        recurrenceRule: `FREQ=WEEKLY;BYDAY=${dayOfWeek}`,
         isActive: true
       });
-      this.selectedDays.set(['SU']);
-      this.endConditionType.set('never');
+      this.selectedDays.set([dayOfWeek]);
+      
+      if (prefillDate) {
+        this.endConditionType.set('count');
+        this.occurrenceCount.set(1);
+      } else {
+        this.endConditionType.set('never');
+      }
     }
     this.isEditingTemplate.set(true);
   }
