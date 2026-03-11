@@ -40,7 +40,7 @@ This project is a full-stack application consisting of a Spring Boot backend and
 
 ## Architecture
 
-- **Backend**: Organized by domain-driven package structure (`com.utcfdn.congregation`, `com.utcfdn.sermon`, etc.). Uses Gradle for builds.
+- **Backend**: Uses Gradle for builds.
 - **Frontend**: Located in the `/frontend` directory. Follows Angular standalone component architecture.
 - **Integration**: During development, the Angular CLI's proxy (configured in `proxy.conf.json`) routes `/api` requests to the backend at `http://localhost:8080`.
 
@@ -57,16 +57,22 @@ This project is a full-stack application consisting of a Spring Boot backend and
 - **Test**: `npm test`
 
 ## Development Conventions
-
-- **Component Style**: Frontend uses Angular standalone components.  Each component should have separate template and style files.
-- **Data Handling**: Frontend utilizes Angular's `signal` for reactive state management.
-- **API Communication**: The backend exposes `/api/health` for monitoring. The frontend uses `HttpClient` with `provideHttpClient()` in `app.config.ts`.
-- **Styling**: Prefers Vanilla CSS with modern oklch colors and gradients, following the boilerplate aesthetic.  Web component style should be modern but reflect the dignity, tradition, and importance of liturgical worship.
-- **File Naming**:
-    - Backend: PascalCase for Java classes (`HealthController.java`).
-    - Frontend: kebab-case for component selectors (`app-health`), but standalone component filenames are often simple (`health.ts`, `home.ts`).
 - **Environment Interaction**: Connecting directly to the container (e.g., via `docker exec`) to perform non-development functions is preferred over writing ad hoc tests that will be deleted after execution.
 - **Caution**: Avoid use of deprecated features, when possible.
+- **Project Structure**: Organize with domain-driven package structure (`com.utcfdn.congregation`, `com.utcfdn.sermon`, etc.).
+- **SOLID Principles**: Embrace them.  Always suggest ways to refactor a class that has encompassed too many concerns.
+
+### Frontend
+- **Component Style**: Frontend uses Angular standalone components.  Each component should have separate template and style files.
+- **Data Handling**: Frontend utilizes Angular's `signal` for reactive state management.
+- **File Naming**: kebab-case for component selectors (`app-health`), but standalone component filenames are often simple (`health.ts`, `home.ts`).
+ 
+### Backend
+- **API Communication**: The backend exposes `/api/health` for monitoring. The frontend uses `HttpClient` with `provideHttpClient()` in `app.config.ts`.
+- **Styling**: Prefers Vanilla CSS with modern oklch colors and gradients, following the boilerplate aesthetic.  Web component style should be modern but reflect the dignity, tradition, and importance of liturgical worship.
+- **File Naming**: PascalCase for Java classes (`HealthController.java`).
+- **Database Queries**: Use parameterized native SQL queries.  Avoid use of JQL and dynamic repository queries (e.g., findAllByOrderByNameAsc).
+- **Testing**: When adding new features, create tests that thoroughly cover them.  When change code with test coverage, execute the relevant tests.
 
 ## Key Files
 - `src/main/java/com/utcfdn/UtCircuitFdnApplication.java`: Backend entry point.

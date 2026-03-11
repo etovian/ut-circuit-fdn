@@ -1,5 +1,6 @@
 package com.utcfdn.congregation;
 
+import com.utcfdn.person.PersonRelationDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class CongregationDto {
     private String bannerPhotoDirectory;
     private List<String> bannerPhotos;
     private List<CongregationAddressDto> addresses;
+    private List<PersonRelationDto> persons;
 }

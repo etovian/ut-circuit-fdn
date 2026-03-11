@@ -1,6 +1,7 @@
 package com.utcfdn.congregation;
 
 import com.utcfdn.address.AddressEntity;
+import com.utcfdn.person.PersonMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class CongregationMapper {
 
     private final ResourcePatternResolver resourcePatternResolver;
+    private final PersonMapper personMapper;
 
     public CongregationDto toDto(CongregationEntity entity) {
         if (entity == null) {
@@ -58,6 +60,10 @@ public class CongregationMapper {
                 .addresses(entity.getAddresses() != null ? 
                     entity.getAddresses().stream()
                         .map(this::toDto)
+                        .collect(Collectors.toList()) : Collections.emptyList())
+                .persons(entity.getPersons() != null ?
+                    entity.getPersons().stream()
+                        .map(personMapper::toPersonRelationDto)
                         .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
