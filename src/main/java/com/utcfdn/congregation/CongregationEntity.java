@@ -1,5 +1,6 @@
 package com.utcfdn.congregation;
 
+import com.utcfdn.person.CongregationPersonEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,10 @@ public class CongregationEntity {
     )
     @Builder.Default
     private List<CongregationAddress> addresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "congregation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CongregationPersonEntity> persons = new ArrayList<>();
 
     public CongregationEntity(String name, String description, String mission) {
         this.name = name;

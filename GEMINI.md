@@ -74,3 +74,6 @@ This project is a full-stack application consisting of a Spring Boot backend and
 - `frontend/src/app/app.routes.ts`: Main frontend routing configuration.
 - `frontend/src/app/health.ts`: System health monitoring component.
 - `frontend/proxy.conf.json`: Development proxy configuration for API calls.
+
+## Requirements
+- When given a requirements file to process, implement all the unmet requirements listed in it.  Be sure to report your progress and update each requirement in the file when you are finished with the implementation.
