@@ -49,9 +49,6 @@
         <a [routerLink]="['/admin/congregation', congregationServicePublic.getSlug(church.name), 'events']" class="pill secondary">
           Manage Events
         </a>
-        <a [routerLink]="['/admin/congregation', congregationServicePublic.getSlug(church.name), 'persons']" class="pill secondary">
-          Manage People
-        </a>
       </div>
     </section>
 
@@ -95,6 +92,60 @@
       </div>
     </section>
 
+    <div class="horizontal-divider"></div>
+
+    <section id="external-links" class="links-section">
+      <div class="section-header">
+        <div class="accent-bar"></div>
+        <h2>Connect With Us</h2>
+      </div>
+      @if (church.externalLinks && church.externalLinks.length > 0) {
+        <div class="links-grid">
+          @for (link of church.externalLinks; track link.id) {
+            <a [href]="link.url" target="_blank" class="link-card">
+              <div class="link-icon">
+                @switch (link.externalLinkType) {
+                  @case (ExternalLinkType.WEBSITE) {
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
+                      <path d="M480-80q-82 0-155-31.5t-127.5-86Q144-252 112-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q83 0 155.5 31.5t127 86q54.5 54.5 86 127T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Zm0-82q26-36 45-75t31-83H404q12 44 31 83t45 75Zm-104-16q-18-33-31.5-68.5T322-320H204q29 50 72.5 87t99.5 47Zm208 0q56-10 99.5-47t72.5-87H638q-9 39-22.5 74.5T584-178ZM170-400h136q-3-20-4.5-39.5T300-480q0-21 1.5-40.5T306-560H170q-5 20-7.5 39.5T160-480q0 20 2.5 39.5T170-400Zm216 0h188q3-20 4.5-39.5T580-480q0-21-1.5-40.5T574-560H386q-3 20-4.5 39.5T380-480q0 21 1.5 40.5T386-400Zm268 0h136q5-20 7.5-39.5T800-480q0-20-2.5-39.5T790-560H654q3 20 4.5 39.5T660-480q0 21-1.5 40.5T654-400Zm-16-240h118q-29-50-72.5-87t-99.5-47q18 33 31.5 68.5T638-640Zm-234 0h152q-12-44-31-83t-45-75q-26 36-45 75t-31 83Zm-200 0h118q9-39 22.5-74.5T376-782q-56 10-99.5 47T204-640Z"/>
+                    </svg>
+                  }
+                  @case (ExternalLinkType.FACEBOOK) {
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/>
+                    </svg>
+                  }
+                  @case (ExternalLinkType.YOUTUBE) {
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                      <path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77.42-1.56.42-4.81.42-4.81s0-3.25-.42-4.81zM10 15V9l5.2 3L10 15z"/>
+                    </svg>
+                  }
+                  @case (ExternalLinkType.SUBSTACK) {
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                      <path d="M22.539 8.242H1.46V5.406h21.079v2.836zm0 4.381H1.46V24l10.54-5.802L22.54 24V12.623zM22.54 0H1.46v2.836h21.079V0z"/>
+                    </svg>
+                  }
+                }
+              </div>
+              <div class="link-info">
+                <h3>{{ link.title }}</h3>
+                <p>{{ link.description }}</p>
+              </div>
+            </a>
+          }
+        </div>
+      } @else {
+        <div class="no-links">
+          <p>No external links available.</p>
+        </div>
+      }
+      <div class="admin-actions">
+        <a [routerLink]="['/admin/congregation', congregationServicePublic.getSlug(church.name), 'links']" class="pill secondary">
+          Manage Links
+        </a>
+      </div>
+    </section>
+
     @if (church.persons && church.persons.length > 0) {
       <div class="horizontal-divider"></div>
 
@@ -119,6 +170,11 @@
               </div>
             </div>
           }
+        </div>
+        <div class="admin-actions">
+          <a [routerLink]="['/admin/congregation', congregationServicePublic.getSlug(church.name), 'persons']" class="pill secondary">
+            Manage People
+          </a>
         </div>
       </section>
     }

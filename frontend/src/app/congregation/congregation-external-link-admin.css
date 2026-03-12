@@ -1,0 +1,259 @@
+.admin-container {
+  padding: 3rem 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  font-family: "Inter", sans-serif;
+}
+
+header {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-link {
+  align-self: flex-start;
+  text-decoration: none;
+  color: oklch(45% 0.15 20); /* burgundy */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.back-link:hover {
+  transform: translateX(-5px);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: oklch(30% 0.1 260); /* navy */
+  margin: 0;
+  text-align: center;
+}
+
+.congregation-name {
+  color: oklch(45% 0.15 20); /* burgundy */
+}
+
+.admin-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
+
+.btn.primary {
+  background: oklch(45% 0.15 20); /* burgundy */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn.secondary {
+  background: oklch(90% 0.02 85);
+  color: #333;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn.primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.list-section {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+  border: 1px solid oklch(95% 0.01 85);
+}
+
+.data-table {
+  width: 100%;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 120px 1.5fr 2fr 180px;
+  padding: 1.25rem 1.5rem;
+  align-items: center;
+  border-bottom: 1px solid oklch(95% 0.01 85);
+}
+
+.table-row.header {
+  background: oklch(98% 0.01 85);
+  font-weight: 700;
+  color: oklch(30% 0.1 260);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05rem;
+}
+
+.type-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: oklch(95% 0.01 85);
+  color: #666;
+}
+
+.type-badge.website { background: #e3f2fd; color: #1976d2; }
+.type-badge.facebook { background: #e8f0fe; color: #1877f2; }
+.type-badge.youtube { background: #fee7e7; color: #c62828; }
+.type-badge.substack { background: #fff3e0; color: #ef6c00; }
+
+.description-preview {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+.url-link {
+  color: #1976d2;
+  text-decoration: none;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.url-link:hover {
+  text-decoration: underline;
+}
+
+.col.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.order-actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-right: 0.5rem;
+  padding-right: 0.5rem;
+  border-right: 1px solid #eee;
+}
+
+.btn.icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: oklch(95% 0.01 85);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn.icon:hover:not(:disabled) {
+  background: oklch(90% 0.02 85);
+}
+
+.btn.icon:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btn.icon.delete {
+  color: #c62828;
+}
+
+.btn.icon.delete:hover {
+  background: #fee7e7;
+}
+
+.empty-state {
+  padding: 4rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: oklch(30% 0.1 260);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 5rem;
+  font-style: italic;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .col.actions {
+    justify-content: flex-start;
+    margin-top: 1rem;
+  }
+}

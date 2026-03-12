@@ -1,3 +1,5 @@
+import {CongregationExternalLink} from './external-link.model';
+
 export interface WorshipTime {
   title: string;
   time: string;
@@ -38,6 +40,7 @@ export interface Congregation {
   location?: string;
   worshipTimes?: WorshipTime[];
   persons?: PersonRelation[];
+  externalLinks?: CongregationExternalLink[];
 }
 
 export interface ScheduledEvent {

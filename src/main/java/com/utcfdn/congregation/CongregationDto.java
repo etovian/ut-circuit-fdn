@@ -21,4 +21,5 @@ public class CongregationDto {
     private List<String> bannerPhotos;
     private List<CongregationAddressDto> addresses;
     private List<PersonRelationDto> persons;
+    private List<CongregationExternalLinkDto> externalLinks;
 }

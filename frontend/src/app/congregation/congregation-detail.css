@@ -98,8 +98,8 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Use secondary pill styling but visible on white background */
-.events-section .pill.secondary {
+/* Use secondary pill styling but visible on white background for admin actions */
+.admin-actions .pill.secondary {
   background: var(--gray-100, oklch(95% 0.01 85));
   color: var(--navy);
   border: 1px solid var(--gray-400);
@@ -249,6 +249,73 @@ h2 {
   line-height: 1.8;
   color: var(--gray-700);
   margin-bottom: 1.5rem;
+}
+
+/* Links Section */
+.links-section {
+  padding: 0;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+  border: 1px solid oklch(95% 0.01 85);
+}
+
+.link-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  border-color: var(--gold);
+}
+
+.link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  background: var(--burgundy);
+  color: white;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.link-info h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.link-info p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  line-height: 1.4;
+}
+
+.no-links {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  text-align: center;
+  color: var(--gray-700);
+  font-style: italic;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .location-info {

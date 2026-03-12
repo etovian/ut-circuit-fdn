@@ -45,6 +45,11 @@ public class CongregationEntity {
     @Builder.Default
     private List<CongregationPersonEntity> persons = new ArrayList<>();
 
+    @OneToMany(mappedBy = "congregation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("ordinalValue ASC")
+    @Builder.Default
+    private List<CongregationExternalLinkEntity> externalLinks = new ArrayList<>();
+
     public CongregationEntity(String name, String description, String mission) {
         this.name = name;
         this.description = description;

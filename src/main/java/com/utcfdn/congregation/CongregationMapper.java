@@ -19,6 +19,7 @@ public class CongregationMapper {
 
     private final ResourcePatternResolver resourcePatternResolver;
     private final PersonMapper personMapper;
+    private final CongregationExternalLinkMapper congregationExternalLinkMapper;
 
     public CongregationDto toDto(CongregationEntity entity) {
         if (entity == null) {
@@ -64,6 +65,10 @@ public class CongregationMapper {
                 .persons(entity.getPersons() != null ?
                     entity.getPersons().stream()
                         .map(personMapper::toPersonRelationDto)
+                        .collect(Collectors.toList()) : Collections.emptyList())
+                .externalLinks(entity.getExternalLinks() != null ?
+                    entity.getExternalLinks().stream()
+                        .map(congregationExternalLinkMapper::toDto)
                         .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }

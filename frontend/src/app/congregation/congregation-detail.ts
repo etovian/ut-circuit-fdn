@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {CongregationService} from './congregation.service';
 import {Congregation, PersonRelation, ScheduledEvent} from './congregation.model';
+import {ExternalLinkType} from './external-link.model';
 import {interval, Subscription} from 'rxjs';
 import {CdkDragDrop, DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
 
@@ -20,6 +21,7 @@ export class CongregationDetail implements OnDestroy {
   private route = inject(ActivatedRoute);
   private congregationService = inject(CongregationService);
   public congregationServicePublic = this.congregationService; // For template access
+  public ExternalLinkType = ExternalLinkType; // For template access
 
   congregation = signal<Congregation | undefined>(undefined);
   scheduledEvents = signal<ScheduledEvent[]>([]);

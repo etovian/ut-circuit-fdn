@@ -1,0 +1,91 @@
+<div class="admin-container">
+  @if (congregation(); as c) {
+    <header>
+      <a [routerLink]="['/', getSlug(c.name)]" class="back-link">← Back to {{ c.name }}</a>
+      <h1>Manage External Links for <span class="congregation-name">{{ c.name }}</span></h1>
+    </header>
+
+    <div class="admin-actions-bar">
+      <button class="btn primary" (click)="openCreateModal()">+ Add New Link</button>
+    </div>
+
+    <section class="list-section">
+      <div class="data-table">
+        <div class="table-row header">
+          <div class="col type">Type</div>
+          <div class="col title">Title</div>
+          <div class="col url">URL</div>
+          <div class="col actions">Actions</div>
+        </div>
+
+        @for (link of links(); track link.id; let i = $index) {
+          <div class="table-row">
+            <div class="col type">
+              <span class="type-badge" [class]="link.externalLinkType.toLowerCase()">
+                {{ link.externalLinkType }}
+              </span>
+            </div>
+            <div class="col title">
+              <strong>{{ link.title }}</strong>
+              <div class="description-preview">{{ link.description }}</div>
+            </div>
+            <div class="col url">
+              <a [href]="link.url" target="_blank" class="url-link">{{ link.url }}</a>
+            </div>
+            <div class="col actions">
+              <div class="order-actions">
+                <button class="btn icon" (click)="moveUp(i)" [disabled]="i === 0" title="Move Up">↑</button>
+                <button class="btn icon" (click)="moveDown(i)" [disabled]="i === links().length - 1" title="Move Down">↓</button>
+              </div>
+              <button class="btn icon" (click)="openEditModal(link)" title="Edit">✎</button>
+              <button class="btn icon delete" (click)="deleteLink(link)" title="Delete Link">✕</button>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">No external links added yet.</div>
+        }
+      </div>
+    </section>
+
+    @if (isModalOpen()) {
+      <div class="modal-overlay" (click)="closeModal()">
+        <div class="modal" (click)="$event.stopPropagation()">
+          <h2 class="section-title">{{ editingLink() ? 'Edit' : 'Create' }} External Link</h2>
+          
+          <form (submit)="saveLink()">
+            <div class="form-group">
+              <label for="linkType">Link Type</label>
+              <select id="linkType" [(ngModel)]="linkType" name="linkType" required>
+                @for (type of linkTypes; track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="linkTitle">Title</label>
+              <input type="text" id="linkTitle" [(ngModel)]="linkTitle" name="linkTitle" placeholder="e.g. Official Website" required>
+            </div>
+
+            <div class="form-group">
+              <label for="linkUrl">URL</label>
+              <input type="url" id="linkUrl" [(ngModel)]="linkUrl" name="linkUrl" placeholder="https://..." required>
+            </div>
+
+            <div class="form-group">
+              <label for="linkDescription">Description (Optional)</label>
+              <textarea id="linkDescription" [(ngModel)]="linkDescription" name="linkDescription" rows="3"></textarea>
+            </div>
+
+            <div class="modal-actions">
+              <button type="button" class="btn secondary" (click)="closeModal()">Cancel</button>
+              <button type="submit" class="btn primary">Save Link</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="loading">Loading congregation details...</div>
+  }
+</div>
