@@ -94,6 +94,34 @@
         </div>
       </div>
     </section>
+
+    @if (church.persons && church.persons.length > 0) {
+      <div class="horizontal-divider"></div>
+
+      <section id="leadership" class="persons-section">
+        <div class="section-header">
+          <div class="accent-bar"></div>
+          <h2>Our Leadership & Staff</h2>
+        </div>
+        <div class="persons-grid">
+          @for (person of church.persons; track person.id) {
+            <div class="person-card">
+              <div class="person-avatar">
+                @if (person.photoUrl) {
+                  <img [src]="person.photoUrl" [alt]="person.firstName + ' ' + person.lastName">
+                } @else {
+                  {{ person.firstName.charAt(0) }}{{ person.lastName.charAt(0) }}
+                }
+              </div>
+              <div class="person-info">
+                <h3>{{ person.firstName }} {{ person.lastName }}</h3>
+                <p class="position">{{ person.position }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
   </main>
 
   <footer class="church-footer">

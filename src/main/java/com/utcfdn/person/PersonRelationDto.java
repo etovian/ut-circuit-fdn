@@ -14,4 +14,5 @@ public class PersonRelationDto {
     private String firstName;
     private String lastName;
     private String position;
+    private String photoUrl;
 }

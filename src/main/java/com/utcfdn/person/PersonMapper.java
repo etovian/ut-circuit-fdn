@@ -67,11 +67,17 @@ public class PersonMapper {
             return null;
         }
 
+        String photoUrl = null;
+        if (relation.getPerson().getPhotoFileName() != null) {
+            photoUrl = "/api/person-photos/" + relation.getPerson().getPhotoFileName();
+        }
+
         return PersonRelationDto.builder()
                 .id(relation.getPerson().getId())
                 .firstName(relation.getPerson().getFirstName())
                 .lastName(relation.getPerson().getLastName())
                 .position(relation.getPosition())
+                .photoUrl(photoUrl)
                 .build();
     }
 }

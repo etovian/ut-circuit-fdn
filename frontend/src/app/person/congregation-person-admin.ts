@@ -1,5 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {CongregationService} from '../congregation/congregation.service';
 import {PersonService} from './person.service';
@@ -11,7 +11,7 @@ import {PersonSearch} from './person-search';
 @Component({
   selector: 'app-congregation-person-admin',
   standalone: true,
-  imports: [FormsModule, PersonForm, PersonSearch],
+  imports: [FormsModule, PersonForm, PersonSearch, RouterLink],
   templateUrl: './congregation-person-admin.html',
   styleUrl: './congregation-person-admin.css'
 })
@@ -21,13 +21,15 @@ export class CongregationPersonAdmin {
   private personService = inject(PersonService);
 
   congregation = signal<Congregation | undefined>(undefined);
+  slug = signal<string | null>(null);
   selectedPerson = signal<Person>(this.emptyPerson());
   position = '';
 
   constructor() {
-    const slug = this.route.snapshot.paramMap.get('slug');
-    if (slug) {
-      this.congregationService.getCongregationBySlug(slug).subscribe(c => {
+    const s = this.route.snapshot.paramMap.get('slug');
+    this.slug.set(s);
+    if (s) {
+      this.congregationService.getCongregationBySlug(s).subscribe(c => {
         this.congregation.set(c);
       });
     }

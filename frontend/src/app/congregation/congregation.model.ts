@@ -18,6 +18,14 @@ export interface CongregationAddress {
   addressType: 'PHYSICAL' | 'MAILING';
 }
 
+export interface PersonRelation {
+  id: number;
+  firstName: string;
+  lastName: string;
+  position: string;
+  photoUrl?: string;
+}
+
 export interface Congregation {
   id?: number;
   name: string;
@@ -28,6 +36,7 @@ export interface Congregation {
   tagline?: string;
   location?: string;
   worshipTimes?: WorshipTime[];
+  persons?: PersonRelation[];
 }
 
 export interface ScheduledEvent {

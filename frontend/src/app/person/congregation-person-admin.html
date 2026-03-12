@@ -1,6 +1,7 @@
 <div class="admin-container">
   @if (congregation(); as c) {
     <header>
+      <a [routerLink]="['/', slug()]" class="back-link">← Back to Congregation</a>
       <h1>Manage People for <span class="congregation-name">{{ c.name }}</span></h1>
     </header>
 
