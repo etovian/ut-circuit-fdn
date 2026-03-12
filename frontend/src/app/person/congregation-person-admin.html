@@ -5,6 +5,16 @@
       <h1>Manage People for <span class="congregation-name">{{ c.name }}</span></h1>
     </header>
 
+    <div class="admin-grid">
+      <div class="search-section">
+        <div class="section-header">
+          <h2 class="section-title">Find or Create Person</h2>
+          <button class="btn primary" (click)="openCreateModal()">+ Create New</button>
+        </div>
+        <app-person-search (personSelected)="onPersonSelected($event)"></app-person-search>
+      </div>
+    </div>
+
     <section class="list-section">
       <div class="section-actions">
         <h2 class="section-title">Current People at {{ c.name }}</h2>
@@ -43,37 +53,30 @@
       </div>
     </section>
 
-    <div class="admin-grid">
-      <div class="search-section">
-        <h2 class="section-title">1. Find or Create Person</h2>
-        <app-person-search (personSelected)="onPersonSelected($event)"></app-person-search>
+    @if (isModalOpen()) {
+      <div class="modal-overlay" (click)="closeModal()">
+        <div class="modal" (click)="$event.stopPropagation()">
+          <h2 class="section-title">Details & Position</h2>
+          <p class="modal-subtitle">Update person details and their position at {{ c.name }}.</p>
 
-        <div class="new-person-hint">
-          <span>Can't find the person?</span>
-          <button class="btn-new" (click)="resetForm()">Create New</button>
+          <div class="position-field modal-field">
+            <label for="position">Position at {{ c.name }}</label>
+            <input
+              type="text"
+              id="position"
+              [(ngModel)]="position"
+              placeholder="e.g. Pastor, Secretary, Board Member"
+            >
+          </div>
+
+          <app-person-form
+            [person]="selectedPerson()"
+            (save)="onSave($event)"
+            (cancel)="closeModal()"
+          ></app-person-form>
         </div>
       </div>
-
-      <div class="form-section">
-        <h2 class="section-title">2. Details & Position</h2>
-
-        <div class="position-field">
-          <label for="position">Position at {{ c.name }}</label>
-          <input
-            type="text"
-            id="position"
-            [(ngModel)]="position"
-            placeholder="e.g. Pastor, Secretary, Board Member"
-          >
-        </div>
-
-        <app-person-form
-          [person]="selectedPerson()"
-          (save)="onSave($event)"
-          (cancel)="resetForm()"
-        ></app-person-form>
-      </div>
-    </div>
+    }
   } @else {
     <div class="loading">Loading congregation details...</div>
   }

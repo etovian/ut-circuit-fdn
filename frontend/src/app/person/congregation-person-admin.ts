@@ -25,6 +25,7 @@ export class CongregationPersonAdmin {
   selectedPerson = signal<Person>(this.emptyPerson());
   congregationPersons = signal<PersonRelation[]>([]);
   position = '';
+  isModalOpen = signal<boolean>(false);
 
   constructor() {
     const s = this.route.snapshot.paramMap.get('slug');
@@ -56,6 +57,7 @@ export class CongregationPersonAdmin {
     } else {
       this.position = '';
     }
+    this.isModalOpen.set(true);
   }
 
   onSave(person: Person) {
@@ -72,7 +74,7 @@ export class CongregationPersonAdmin {
           .subscribe(() => {
             alert('Person details and congregation association saved successfully!');
             this.loadCongregationPersons(c.id!);
-            this.resetForm();
+            this.closeModal();
           });
       }
     });
@@ -82,9 +84,7 @@ export class CongregationPersonAdmin {
     this.personService.getPerson(relation.id).subscribe(person => {
       this.selectedPerson.set(person);
       this.position = relation.position;
-      
-      // Scroll to form
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.isModalOpen.set(true);
     });
   }
 
@@ -96,7 +96,7 @@ export class CongregationPersonAdmin {
       this.personService.removePersonFromCongregation(c.id, relation.id).subscribe(() => {
         this.loadCongregationPersons(c.id!);
         if (this.selectedPerson().id === relation.id) {
-          this.resetForm();
+          this.closeModal();
         }
       });
     }
@@ -125,9 +125,16 @@ export class CongregationPersonAdmin {
     this.personService.reorderPersons(c.id, personIds).subscribe();
   }
 
-  resetForm() {
+  openCreateModal() {
     this.selectedPerson.set(this.emptyPerson());
     this.position = '';
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.selectedPerson.set(this.emptyPerson());
+    this.position = '';
+    this.isModalOpen.set(false);
   }
 
   private emptyPerson(): Person {
