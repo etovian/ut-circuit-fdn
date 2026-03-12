@@ -13,11 +13,20 @@ import java.util.stream.Collectors;
 public class PersonController {
 
     private final PersonService personService;
+    private final PersonSearchService personSearchService;
     private final PersonMapper personMapper;
 
     @GetMapping
     public List<PersonDto> getAll() {
         return personService.findAll().stream()
+                .map(personMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/search")
+    public List<PersonDto> search(@RequestParam(required = false) String firstName,
+                                 @RequestParam(required = false) String lastName) {
+        return personSearchService.search(firstName, lastName).stream()
                 .map(personMapper::toDto)
                 .collect(Collectors.toList());
     }

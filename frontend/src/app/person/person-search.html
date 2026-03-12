@@ -1,0 +1,31 @@
+<div class="search-container">
+  <div class="search-input-group">
+    <input
+      type="text"
+      placeholder="Search by First Name..."
+      [(ngModel)]="firstName"
+      (input)="onSearchChange()"
+    >
+    <input
+      type="text"
+      placeholder="Search by Last Name..."
+      [(ngModel)]="lastName"
+      (input)="onSearchChange()"
+    >
+  </div>
+
+  @if (results().length > 0) {
+    <ul class="results-list">
+      @for (person of results(); track person.id) {
+        <li class="result-item" (click)="selectPerson(person)">
+          <span class="person-name">{{ person.firstName }} {{ person.lastName }}</span>
+          @if (person.title) {
+            <span class="person-title">, {{ person.title }}</span>
+          }
+        </li>
+      }
+    </ul>
+  } @else if (firstName || lastName) {
+    <div class="no-results">No people found matching your search.</div>
+  }
+</div>

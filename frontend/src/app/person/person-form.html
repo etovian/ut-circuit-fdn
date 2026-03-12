@@ -1,0 +1,48 @@
+<div class="person-form">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" [(ngModel)]="person().title" placeholder="e.g. Rev., Dr.">
+    </div>
+    <div class="form-group">
+      <label for="suffix">Suffix</label>
+      <input type="text" id="suffix" [(ngModel)]="person().suffix" placeholder="e.g. Jr., III">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" [(ngModel)]="person().firstName" required>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" [(ngModel)]="person().lastName" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="middleName">Middle Name</label>
+    <input type="text" id="middleName" [(ngModel)]="person().middleName">
+  </div>
+
+  <div class="form-group">
+    <label for="dateOfBirth">Date of Birth</label>
+    <input type="date" id="dateOfBirth" [(ngModel)]="person().dateOfBirth">
+  </div>
+
+  <div class="form-group">
+    <label for="photoFileName">Photo File Name</label>
+    <input type="text" id="photoFileName" [(ngModel)]="person().photoFileName" placeholder="e.g. pastor-smith.webp">
+  </div>
+
+  <div class="form-group">
+    <label for="biography">Biography</label>
+    <textarea id="biography" [(ngModel)]="person().biography" rows="4"></textarea>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="secondary" (click)="onCancel()">Cancel</button>
+    <button type="button" class="primary" (click)="onSave()">Save Person</button>
+  </div>
+</div>

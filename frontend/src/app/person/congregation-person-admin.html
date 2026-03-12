@@ -1,0 +1,41 @@
+<div class="admin-container">
+  @if (congregation(); as c) {
+    <header>
+      <h1>Manage People for <span class="congregation-name">{{ c.name }}</span></h1>
+    </header>
+
+    <div class="admin-grid">
+      <div class="search-section">
+        <h2 class="section-title">1. Find or Create Person</h2>
+        <app-person-search (personSelected)="onPersonSelected($event)"></app-person-search>
+
+        <div class="new-person-hint">
+          <span>Can't find the person?</span>
+          <button class="btn-new" (click)="resetForm()">Create New</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">2. Details & Position</h2>
+
+        <div class="position-field">
+          <label for="position">Position at {{ c.name }}</label>
+          <input
+            type="text"
+            id="position"
+            [(ngModel)]="position"
+            placeholder="e.g. Pastor, Secretary, Board Member"
+          >
+        </div>
+
+        <app-person-form
+          [person]="selectedPerson()"
+          (save)="onSave($event)"
+          (cancel)="resetForm()"
+        ></app-person-form>
+      </div>
+    </div>
+  } @else {
+    <div class="loading">Loading congregation details...</div>
+  }
+</div>

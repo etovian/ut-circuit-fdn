@@ -1,0 +1,87 @@
+.person-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  max-width: 600px;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+input, textarea, select {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: oklch(53.18% 0.28 296.97); /* electric-violet */
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+button.primary {
+  background: linear-gradient(90deg, oklch(63.32% 0.24 31.68), oklch(69.02% 0.277 332.77)); /* orange-red to vivid-pink */
+  color: white;
+  border: none;
+}
+
+button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+}
+
+button.secondary {
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+button.secondary:hover {
+  background: #f8f8f8;
+}
