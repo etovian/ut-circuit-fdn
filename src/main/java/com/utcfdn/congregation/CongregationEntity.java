@@ -41,6 +41,7 @@ public class CongregationEntity {
     private List<CongregationAddress> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "congregation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrdinalValue ASC")
     @Builder.Default
     private List<CongregationPersonEntity> persons = new ArrayList<>();
 

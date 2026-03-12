@@ -78,6 +78,7 @@ public class PersonMapper {
                 .lastName(relation.getPerson().getLastName())
                 .position(relation.getPosition())
                 .photoUrl(photoUrl)
+                .sortOrdinalValue(relation.getSortOrdinalValue())
                 .build();
     }
 }

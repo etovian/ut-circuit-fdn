@@ -2,8 +2,9 @@ import {Component, computed, inject, OnDestroy, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {CongregationService} from './congregation.service';
-import {Congregation, ScheduledEvent} from './congregation.model';
+import {Congregation, PersonRelation, ScheduledEvent} from './congregation.model';
 import {interval, Subscription} from 'rxjs';
+import {CdkDragDrop, DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
 
 const DEFAULT_HERO_PHOTO_URL = 'https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1600';
 const PHOTO_ROTATION_INTERVAL_MS = 5000;
@@ -11,7 +12,7 @@ const PHOTO_ROTATION_INTERVAL_MS = 5000;
 @Component({
   selector: 'app-congregation-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DragDropModule],
   templateUrl: './congregation-detail.html',
   styleUrl: './congregation-detail.css'
 })
@@ -60,6 +61,27 @@ export class CongregationDetail implements OnDestroy {
             });
           }
         });
+      }
+    });
+  }
+
+  drop(event: CdkDragDrop<PersonRelation[]>) {
+    const church = this.congregation();
+    if (!church || !church.persons || !church.id) return;
+
+    const persons = [...church.persons];
+    moveItemInArray(persons, event.previousIndex, event.currentIndex);
+    
+    // Update local state immediately for responsiveness
+    this.congregation.update(c => c ? { ...c, persons } : undefined);
+
+    // Persist to backend
+    const personIds = persons.map(p => p.id);
+    this.congregationService.reorderPersons(church.id, personIds).subscribe({
+      error: (err) => {
+        console.error('Failed to reorder persons', err);
+        // Rollback on error
+        this.congregation.set(church);
       }
     });
   }

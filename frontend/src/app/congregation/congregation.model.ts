@@ -24,6 +24,7 @@ export interface PersonRelation {
   lastName: string;
   position: string;
   photoUrl?: string;
+  sortOrdinalValue: number;
 }
 
 export interface Congregation {

@@ -15,4 +15,5 @@ public class PersonRelationDto {
     private String lastName;
     private String position;
     private String photoUrl;
+    private Integer sortOrdinalValue;
 }

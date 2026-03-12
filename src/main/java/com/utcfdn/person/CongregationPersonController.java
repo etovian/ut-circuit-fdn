@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/congregations/{congregationId}/persons")
 @RequiredArgsConstructor
@@ -20,6 +22,12 @@ public class CongregationPersonController {
     @PutMapping("/{personId}")
     public PersonRelationDto updatePersonPosition(@PathVariable Long congregationId, @PathVariable Long personId, @RequestBody String position) {
         return personMapper.toPersonRelationDto(congregationPersonService.updatePersonPosition(congregationId, personId, position));
+    }
+
+    @PutMapping("/reorder")
+    public ResponseEntity<Void> reorderPersons(@PathVariable Long congregationId, @RequestBody List<Long> personIds) {
+        congregationPersonService.reorderPersons(congregationId, personIds);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{personId}")

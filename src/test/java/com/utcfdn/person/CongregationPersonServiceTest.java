@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -30,6 +32,36 @@ class CongregationPersonServiceTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Test
+    void testReorderPersons() {
+        CongregationEntity congregation = congregationRepository.save(new CongregationEntity("Test Congregation", "Desc", "Mission"));
+        PersonEntity person1 = personRepository.save(PersonEntity.builder().firstName("Person1").lastName("Doe").build());
+        PersonEntity person2 = personRepository.save(PersonEntity.builder().firstName("Person2").lastName("Doe").build());
+        PersonEntity person3 = personRepository.save(PersonEntity.builder().firstName("Person3").lastName("Doe").build());
+
+        congregationPersonService.addPersonToCongregation(congregation.getId(), person1.getId(), "Role1");
+        congregationPersonService.addPersonToCongregation(congregation.getId(), person2.getId(), "Role2");
+        congregationPersonService.addPersonToCongregation(congregation.getId(), person3.getId(), "Role3");
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // Reorder to 3, 1, 2
+        List<Long> newOrder = List.of(person3.getId(), person1.getId(), person2.getId());
+        congregationPersonService.reorderPersons(congregation.getId(), newOrder);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        CongregationPersonEntity rel1 = congregationPersonRepository.findById(new CongregationPersonId(congregation.getId(), person1.getId())).orElseThrow();
+        CongregationPersonEntity rel2 = congregationPersonRepository.findById(new CongregationPersonId(congregation.getId(), person2.getId())).orElseThrow();
+        CongregationPersonEntity rel3 = congregationPersonRepository.findById(new CongregationPersonId(congregation.getId(), person3.getId())).orElseThrow();
+
+        assertEquals(1, rel1.getSortOrdinalValue());
+        assertEquals(2, rel2.getSortOrdinalValue());
+        assertEquals(0, rel3.getSortOrdinalValue());
+    }
 
     @Test
     void testAddPersonToCongregation() {

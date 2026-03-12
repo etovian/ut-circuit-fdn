@@ -30,4 +30,7 @@ public class CongregationPersonEntity {
 
     @Column(nullable = false)
     private String position;
+
+    @Column(name = "sort_ordinal_value", nullable = false)
+    private Integer sortOrdinalValue;
 }

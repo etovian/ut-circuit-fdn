@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CongregationPersonService {
@@ -27,10 +29,23 @@ public class CongregationPersonService {
                         .id(id)
                         .congregation(congregation)
                         .person(person)
+                        .sortOrdinalValue(0)
                         .build());
 
         relation.setPosition(position);
         return congregationPersonRepository.save(relation);
+    }
+
+    @Transactional
+    public void reorderPersons(Long congregationId, List<Long> personIds) {
+        for (int i = 0; i < personIds.size(); i++) {
+            Long personId = personIds.get(i);
+            CongregationPersonId id = new CongregationPersonId(congregationId, personId);
+            CongregationPersonEntity relation = congregationPersonRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Relationship not found for congregation " + congregationId + " and person " + personId));
+            relation.setSortOrdinalValue(i);
+            congregationPersonRepository.save(relation);
+        }
     }
 
     @Transactional

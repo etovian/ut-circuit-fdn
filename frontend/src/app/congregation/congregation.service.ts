@@ -31,6 +31,10 @@ export class CongregationService {
     return this.http.get<ScheduledEvent[]>(`/api/events/scheduled/next-seven-days?congregationId=${congregationId}`);
   }
 
+  reorderPersons(congregationId: number, personIds: number[]): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${congregationId}/persons/reorder`, personIds);
+  }
+
   getSlug(name: string): string {
     return name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
   }
