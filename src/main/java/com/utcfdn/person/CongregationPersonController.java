@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/congregations/{congregationId}/persons")
@@ -13,6 +14,13 @@ public class CongregationPersonController {
 
     private final CongregationPersonService congregationPersonService;
     private final PersonMapper personMapper;
+
+    @GetMapping
+    public List<PersonRelationDto> getCongregationPersons(@PathVariable Long congregationId) {
+        return congregationPersonService.findAllByCongregationIdOrdered(congregationId).stream()
+                .map(personMapper::toPersonRelationDto)
+                .collect(Collectors.toList());
+    }
 
     @PostMapping
     public PersonRelationDto addPersonToCongregation(@PathVariable Long congregationId, @RequestBody CongregationPersonRequest request) {

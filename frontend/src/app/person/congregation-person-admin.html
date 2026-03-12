@@ -5,6 +5,44 @@
       <h1>Manage People for <span class="congregation-name">{{ c.name }}</span></h1>
     </header>
 
+    <section class="list-section">
+      <div class="section-actions">
+        <h2 class="section-title">Current People at {{ c.name }}</h2>
+      </div>
+
+      <div class="data-table">
+        <div class="table-row header">
+          <div class="col">Name</div>
+          <div class="col">Position</div>
+          <div class="col actions">Actions</div>
+        </div>
+
+        @for (cp of congregationPersons(); track cp.id; let i = $index) {
+          <div class="table-row">
+            <div class="col">
+              <div class="person-info">
+                @if (cp.photoUrl) {
+                  <img [src]="cp.photoUrl" class="person-thumb" alt="">
+                }
+                <strong>{{ cp.firstName }} {{ cp.lastName }}</strong>
+              </div>
+            </div>
+            <div class="col">{{ cp.position }}</div>
+            <div class="col actions">
+              <div class="order-actions">
+                <button class="btn icon" (click)="moveUp(i)" [disabled]="i === 0" title="Move Up">↑</button>
+                <button class="btn icon" (click)="moveDown(i)" [disabled]="i === congregationPersons().length - 1" title="Move Down">↓</button>
+              </div>
+              <button class="btn icon" (click)="onEdit(cp)" title="Edit">✎</button>
+              <button class="btn icon delete" (click)="onDelete(cp)" title="Remove from Congregation">✕</button>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">No people assigned to this congregation yet.</div>
+        }
+      </div>
+    </section>
+
     <div class="admin-grid">
       <div class="search-section">
         <h2 class="section-title">1. Find or Create Person</h2>

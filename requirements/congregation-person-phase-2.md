@@ -16,6 +16,11 @@
 - Person records that meet the search criterial will be displayed in a list.
 - Clicking a person in the list will cause a "person event" to bubble up out of the component, so that it can be used in different contexts.
 
+## 4. Admin - Congregation Person List [DONE]
+
+- The "Manage People" page should show a list of people already associated with the congregation.  This should be similar to the "Recurring Patterns" interface in "Event Management".
+- Each row in the list should have buttons that allow the selected congregation person to be selected for editing, deleted (which would only delete the congregation_person relationship), and moved up or down (ordinal position).
+
 # Backend
 
 ## 1. Search Endpoint [DONE]

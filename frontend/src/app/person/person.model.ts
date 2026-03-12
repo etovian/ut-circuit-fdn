@@ -27,4 +27,6 @@ export interface PersonRelation {
   firstName: string;
   lastName: string;
   position: string;
+  photoUrl?: string;
+  sortOrdinalValue?: number;
 }

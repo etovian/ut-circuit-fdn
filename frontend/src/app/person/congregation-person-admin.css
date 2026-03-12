@@ -118,3 +118,98 @@ h1 {
   font-style: italic;
   color: #666;
 }
+
+.list-section {
+  margin-bottom: 4rem;
+}
+
+.data-table {
+  background: white;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr;
+  padding: 1rem 1.5rem;
+  align-items: center;
+  border-bottom: 1px solid oklch(95% 0.01 85);
+}
+
+.table-row.header {
+  background: oklch(98% 0.01 85);
+  font-weight: 700;
+  color: oklch(30% 0.02 85);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05rem;
+}
+
+.col.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.order-actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-right: 1rem;
+  padding-right: 1rem;
+  border-right: 1px solid #eee;
+}
+
+.btn.icon {
+  padding: 0.4rem 0.8rem;
+  background: oklch(95% 0.01 85);
+  border-radius: 0.4rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+}
+
+.btn.icon:hover:not(:disabled) {
+  background: oklch(90% 0.02 85);
+}
+
+.btn.icon:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btn.icon.delete {
+  color: oklch(50% 0.2 25);
+}
+
+.btn.icon.delete:hover {
+  background: oklch(90% 0.05 25);
+  color: white;
+}
+
+.person-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.person-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f0f0;
+}
+
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}

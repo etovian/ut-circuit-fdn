@@ -39,6 +39,11 @@ public class CongregationPersonService {
         return congregationPersonRepository.save(relation);
     }
 
+    @Transactional(readOnly = true)
+    public List<CongregationPersonEntity> findAllByCongregationIdOrdered(Long congregationId) {
+        return congregationPersonRepository.findAllByCongregationIdOrdered(congregationId);
+    }
+
     @Transactional
     public void reorderPersons(Long congregationId, List<Long> personIds) {
         for (int i = 0; i < personIds.size(); i++) {
