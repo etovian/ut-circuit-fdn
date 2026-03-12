@@ -7,6 +7,7 @@ import {Person, PersonRelation} from './person.model';
 import {Congregation} from '../congregation/congregation.model';
 import {PersonForm} from './person-form';
 import {PersonSearch} from './person-search';
+import {ToastService} from '../shared/toast.service';
 
 @Component({
   selector: 'app-congregation-person-admin',
@@ -19,6 +20,7 @@ export class CongregationPersonAdmin {
   private route = inject(ActivatedRoute);
   private congregationService = inject(CongregationService);
   private personService = inject(PersonService);
+  private toastService = inject(ToastService);
 
   congregation = signal<Congregation | undefined>(undefined);
   slug = signal<string | null>(null);
@@ -72,7 +74,7 @@ export class CongregationPersonAdmin {
       if (savedPerson.id) {
         this.personService.addPersonToCongregation(c.id!, savedPerson.id, this.position)
           .subscribe(() => {
-            alert('Person details and congregation association saved successfully!');
+            this.toastService.success('Person details and congregation association saved successfully!');
             this.loadCongregationPersons(c.id!);
             this.closeModal();
           });
