@@ -25,12 +25,15 @@ public class CongregationPersonService {
 
         CongregationPersonId id = new CongregationPersonId(congregationId, personId);
         CongregationPersonEntity relation = congregationPersonRepository.findById(id)
-                .orElseGet(() -> CongregationPersonEntity.builder()
+                .orElseGet(() -> {
+                    int maxSort = congregationPersonRepository.findMaxSortOrdinalByCongregationId(congregationId);
+                    return CongregationPersonEntity.builder()
                         .id(id)
                         .congregation(congregation)
                         .person(person)
-                        .sortOrdinalValue(0)
-                        .build());
+                        .sortOrdinalValue(maxSort + 1)
+                        .build();
+                });
 
         relation.setPosition(position);
         return congregationPersonRepository.save(relation);

@@ -103,7 +103,7 @@
           <div class="accent-bar"></div>
           <h2>Our Leadership & Staff</h2>
         </div>
-        <div class="persons-grid" cdkDropList [cdkDropListData]="church.persons" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
+        <div class="persons-grid" cdkDropList [cdkDropListData]="church.persons" (cdkDropListDropped)="drop($event)">
           @for (person of church.persons; track person.id) {
             <div class="person-card" cdkDrag>
               <div class="person-avatar">
