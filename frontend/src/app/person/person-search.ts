@@ -1,7 +1,7 @@
 import {Component, inject, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime} from 'rxjs/operators';
 import {Person} from './person.model';
 import {PersonService} from './person.service';
 
@@ -14,7 +14,7 @@ import {PersonService} from './person.service';
 })
 export class PersonSearch {
   private personService = inject(PersonService);
-  private searchSubject = new Subject<void>();
+  private searchSubject = new Subject<{first: string, last: string}>();
 
   firstName = '';
   lastName = '';
@@ -23,24 +23,23 @@ export class PersonSearch {
 
   constructor() {
     this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      this.performSearch();
+      debounceTime(300)
+    ).subscribe(terms => {
+      this.performSearch(terms.first, terms.last);
     });
   }
 
   onSearchChange() {
-    this.searchSubject.next();
+    this.searchSubject.next({first: this.firstName, last: this.lastName});
   }
 
-  private performSearch() {
-    if (!this.firstName && !this.lastName) {
+  private performSearch(first: string, last: string) {
+    if (!first && !last) {
       this.results.set([]);
       return;
     }
 
-    this.personService.searchPersons(this.firstName, this.lastName)
+    this.personService.searchPersons(first, last)
       .subscribe(persons => this.results.set(persons));
   }
 

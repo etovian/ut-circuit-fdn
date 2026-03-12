@@ -57,6 +57,22 @@ input:focus {
   color: #333;
 }
 
+.person-positions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.position-tag {
+  font-size: 0.75rem;
+  background: #f1f3f5;
+  padding: 0.2rem 0.6rem;
+  border-radius: 2rem;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
 .no-results {
   padding: 1rem;
   color: #666;

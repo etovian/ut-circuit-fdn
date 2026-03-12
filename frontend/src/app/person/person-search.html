@@ -18,9 +18,18 @@
     <ul class="results-list">
       @for (person of results(); track person.id) {
         <li class="result-item" (click)="selectPerson(person)">
-          <span class="person-name">{{ person.firstName }} {{ person.lastName }}</span>
-          @if (person.title) {
-            <span class="person-title">, {{ person.title }}</span>
+          <div class="person-info">
+            <span class="person-name">{{ person.firstName }} {{ person.lastName }}</span>
+            @if (person.title) {
+              <span class="person-title">, {{ person.title }}</span>
+            }
+          </div>
+          @if (person.congregations && person.congregations.length > 0) {
+            <div class="person-positions">
+              @for (rel of person.congregations; track rel.id) {
+                <span class="position-tag">{{ rel.position }} at {{ rel.name }}</span>
+              }
+            </div>
           }
         </li>
       }

@@ -15,20 +15,21 @@ public class CongregationPersonService {
     private final CongregationRepository congregationRepository;
 
     @Transactional
-    public CongregationPersonEntity addPersonToCongregation(Long congregationId, PersonEntity person, String position) {
+    public CongregationPersonEntity addPersonToCongregation(Long congregationId, Long personId, String position) {
         CongregationEntity congregation = congregationRepository.findById(congregationId)
                 .orElseThrow(() -> new IllegalArgumentException("Congregation not found with id: " + congregationId));
+        PersonEntity person = personRepository.findById(personId)
+                .orElseThrow(() -> new IllegalArgumentException("Person not found with id: " + personId));
 
-        PersonEntity savedPerson = personRepository.save(person);
+        CongregationPersonId id = new CongregationPersonId(congregationId, personId);
+        CongregationPersonEntity relation = congregationPersonRepository.findById(id)
+                .orElseGet(() -> CongregationPersonEntity.builder()
+                        .id(id)
+                        .congregation(congregation)
+                        .person(person)
+                        .build());
 
-        CongregationPersonId id = new CongregationPersonId(congregationId, savedPerson.getId());
-        CongregationPersonEntity relation = CongregationPersonEntity.builder()
-                .id(id)
-                .congregation(congregation)
-                .person(savedPerson)
-                .position(position)
-                .build();
-
+        relation.setPosition(position);
         return congregationPersonRepository.save(relation);
     }
 

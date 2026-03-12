@@ -43,7 +43,7 @@ public class PersonEntity {
 
     private String biography;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CongregationPersonEntity> congregations = new ArrayList<>();
 }

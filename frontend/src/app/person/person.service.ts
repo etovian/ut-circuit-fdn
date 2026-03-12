@@ -33,8 +33,9 @@ export class PersonService {
     return this.http.put<Person>(`${this.apiUrl}/${id}`, person);
   }
 
-  addPersonToCongregation(congregationId: number, person: Person, position: string): Observable<PersonRelation> {
+  addPersonToCongregation(congregationId: number, personId: number, position: string): Observable<PersonRelation> {
     const url = `/api/congregations/${congregationId}/persons`;
-    return this.http.post<PersonRelation>(url, { person, position });
+    return this.http.post<PersonRelation>(url, { personId, position });
   }
+
 }

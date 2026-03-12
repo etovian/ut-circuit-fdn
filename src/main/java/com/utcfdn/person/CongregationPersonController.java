@@ -14,8 +14,7 @@ public class CongregationPersonController {
 
     @PostMapping
     public PersonRelationDto addPersonToCongregation(@PathVariable Long congregationId, @RequestBody CongregationPersonRequest request) {
-        PersonEntity personEntity = personMapper.toEntity(request.getPerson());
-        return personMapper.toPersonRelationDto(congregationPersonService.addPersonToCongregation(congregationId, personEntity, request.getPosition()));
+        return personMapper.toPersonRelationDto(congregationPersonService.addPersonToCongregation(congregationId, request.getPersonId(), request.getPosition()));
     }
 
     @PutMapping("/{personId}")

@@ -1,4 +1,4 @@
-import {Component, input, output} from '@angular/core';
+import {Component, effect, input, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Person} from './person.model';
 
@@ -18,8 +18,25 @@ export class PersonForm {
   save = output<Person>();
   cancel = output<void>();
 
+  // Local state for the form
+  formData = signal<Person>({ firstName: '', lastName: '' });
+
+  constructor() {
+    // Update local state when input changes
+    effect(() => {
+      this.formData.set({ ...this.person() });
+    });
+  }
+
+  updateField(field: keyof Person, value: any) {
+    this.formData.update(data => ({
+      ...data,
+      [field]: value
+    }));
+  }
+
   onSave() {
-    this.save.emit(this.person());
+    this.save.emit(this.formData());
   }
 
   onCancel() {

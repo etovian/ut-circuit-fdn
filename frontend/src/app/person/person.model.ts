@@ -8,6 +8,13 @@ export interface Person {
   dateOfBirth?: string;
   photoFileName?: string;
   biography?: string;
+  congregations?: CongregationRelation[];
+}
+
+export interface CongregationRelation {
+  id: number;
+  name: string;
+  position: string;
 }
 
 export interface CongregationPerson {

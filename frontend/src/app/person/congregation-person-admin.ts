@@ -35,17 +35,34 @@ export class CongregationPersonAdmin {
 
   onPersonSelected(person: Person) {
     this.selectedPerson.set({...person});
+    
+    // Set position if the person is already associated with this congregation
+    const currentCongregationId = this.congregation()?.id;
+    if (currentCongregationId && person.congregations) {
+      const relation = person.congregations.find(c => c.id === currentCongregationId);
+      this.position = relation ? relation.position : '';
+    } else {
+      this.position = '';
+    }
   }
 
   onSave(person: Person) {
     const c = this.congregation();
     if (!c || !c.id) return;
 
-    this.personService.addPersonToCongregation(c.id, person, this.position)
-      .subscribe(() => {
-        alert('Person associated with congregation successfully!');
-        this.resetForm();
-      });
+    const personObs = person.id 
+      ? this.personService.updatePerson(person.id, person)
+      : this.personService.createPerson(person);
+
+    personObs.subscribe(savedPerson => {
+      if (savedPerson.id) {
+        this.personService.addPersonToCongregation(c.id!, savedPerson.id, this.position)
+          .subscribe(() => {
+            alert('Person details and congregation association saved successfully!');
+            this.resetForm();
+          });
+      }
+    });
   }
 
   resetForm() {

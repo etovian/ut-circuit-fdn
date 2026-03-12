@@ -43,8 +43,9 @@ class CongregationPersonServiceTest {
                 .build();
 
         // Add person to congregation
+        PersonEntity savedPerson = personRepository.save(person);
         CongregationPersonEntity relation = congregationPersonService.addPersonToCongregation(
-                congregation.getId(), person, "Pastor");
+                congregation.getId(), savedPerson.getId(), "Pastor");
 
         assertNotNull(relation);
         assertEquals("Pastor", relation.getPosition());
@@ -60,7 +61,7 @@ class CongregationPersonServiceTest {
         CongregationEntity congregation = congregationRepository.save(new CongregationEntity("Test Congregation", "Desc", "Mission"));
         PersonEntity person = personRepository.save(PersonEntity.builder().firstName("Jane").lastName("Doe").build());
         
-        congregationPersonService.addPersonToCongregation(congregation.getId(), person, "Elder");
+        congregationPersonService.addPersonToCongregation(congregation.getId(), person.getId(), "Elder");
         
         CongregationPersonEntity updated = congregationPersonService.updatePersonPosition(congregation.getId(), person.getId(), "Lead Elder");
         
@@ -72,7 +73,7 @@ class CongregationPersonServiceTest {
         CongregationEntity congregation = congregationRepository.save(new CongregationEntity("Test Congregation", "Desc", "Mission"));
         PersonEntity person = personRepository.save(PersonEntity.builder().firstName("Jane").lastName("Doe").build());
         
-        congregationPersonService.addPersonToCongregation(congregation.getId(), person, "Elder");
+        congregationPersonService.addPersonToCongregation(congregation.getId(), person.getId(), "Elder");
         
         congregationPersonService.removePersonFromCongregation(congregation.getId(), person.getId());
         
@@ -86,7 +87,7 @@ class CongregationPersonServiceTest {
         CongregationEntity congregation = congregationRepository.save(new CongregationEntity("Test Congregation", "Desc", "Mission"));
         PersonEntity person = personRepository.save(PersonEntity.builder().firstName("Jane").lastName("Doe").build());
         
-        congregationPersonService.addPersonToCongregation(congregation.getId(), person, "Elder");
+        congregationPersonService.addPersonToCongregation(congregation.getId(), person.getId(), "Elder");
         
         // Ensure everything is written to DB and persistence context is cleared
         entityManager.flush();
@@ -104,5 +105,63 @@ class CongregationPersonServiceTest {
 
         // Relationship should be gone due to cascade
         assertFalse(congregationPersonRepository.findById(new CongregationPersonId(congregation.getId(), person.getId())).isPresent());
+    }
+
+    @Test
+    void testAddExistingPersonToDifferentCongregationDoesNotOrphanOriginal() {
+        // 1. Setup two congregations
+        CongregationEntity congregation1 = congregationRepository.save(new CongregationEntity("Congregation One", "Desc 1", "Mission 1"));
+        CongregationEntity congregation2 = congregationRepository.save(new CongregationEntity("Congregation Two", "Desc 2", "Mission 2"));
+        
+        // 2. Create a person and associate with the first congregation
+        PersonEntity person = personRepository.save(PersonEntity.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .biography("Original Bio")
+                .build());
+        
+        congregationPersonService.addPersonToCongregation(congregation1.getId(), person.getId(), "Pastor");
+        
+        entityManager.flush();
+        entityManager.clear();
+        
+        // Verify initial setup
+        PersonEntity savedPerson = personRepository.findAll().stream()
+                .filter(p -> p.getFirstName().equals("John"))
+                .findFirst().orElseThrow();
+        Long personId = savedPerson.getId();
+        
+        assertEquals(1, congregationPersonRepository.findAll().stream()
+                .filter(cp -> cp.getPerson().getId().equals(personId)).count());
+
+        // 3. Update the person's info and associate with the SECOND congregation
+        // This simulates the frontend sending the person with their ID back to the server
+        PersonEntity personUpdate = PersonEntity.builder()
+                .id(personId)
+                .firstName("John")
+                .lastName("Doe")
+                .biography("Updated Bio")
+                .build();
+        personRepository.save(personUpdate);
+        
+        congregationPersonService.addPersonToCongregation(congregation2.getId(), personUpdate.getId(), "Guest Speaker");
+        
+        entityManager.flush();
+        entityManager.clear();
+
+        // 4. VERIFY: The person should now be associated with BOTH congregations
+        PersonEntity finalPerson = personRepository.findById(personId).orElseThrow();
+        assertEquals("Updated Bio", finalPerson.getBiography());
+        
+        long relationshipCount = congregationPersonRepository.findAll().stream()
+                .filter(cp -> cp.getPerson().getId().equals(personId))
+                .count();
+        
+        assertEquals(2, relationshipCount, "Person should have 2 congregation relationships, not 1");
+        
+        assertTrue(congregationPersonRepository.findById(new CongregationPersonId(congregation1.getId(), personId)).isPresent(), 
+                "Original relationship to Congregation 1 should still exist");
+        assertTrue(congregationPersonRepository.findById(new CongregationPersonId(congregation2.getId(), personId)).isPresent(), 
+                "New relationship to Congregation 2 should exist");
     }
 }

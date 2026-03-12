@@ -2,43 +2,43 @@
   <div class="form-row">
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" id="title" [(ngModel)]="person().title" placeholder="e.g. Rev., Dr.">
+      <input type="text" id="title" [ngModel]="formData().title" (ngModelChange)="updateField('title', $event)" placeholder="e.g. Rev., Dr.">
     </div>
     <div class="form-group">
       <label for="suffix">Suffix</label>
-      <input type="text" id="suffix" [(ngModel)]="person().suffix" placeholder="e.g. Jr., III">
+      <input type="text" id="suffix" [ngModel]="formData().suffix" (ngModelChange)="updateField('suffix', $event)" placeholder="e.g. Jr., III">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group">
       <label for="firstName">First Name</label>
-      <input type="text" id="firstName" [(ngModel)]="person().firstName" required>
+      <input type="text" id="firstName" [ngModel]="formData().firstName" (ngModelChange)="updateField('firstName', $event)" required>
     </div>
     <div class="form-group">
       <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" [(ngModel)]="person().lastName" required>
+      <input type="text" id="lastName" [ngModel]="formData().lastName" (ngModelChange)="updateField('lastName', $event)" required>
     </div>
   </div>
 
   <div class="form-group">
     <label for="middleName">Middle Name</label>
-    <input type="text" id="middleName" [(ngModel)]="person().middleName">
+    <input type="text" id="middleName" [ngModel]="formData().middleName" (ngModelChange)="updateField('middleName', $event)">
   </div>
 
   <div class="form-group">
     <label for="dateOfBirth">Date of Birth</label>
-    <input type="date" id="dateOfBirth" [(ngModel)]="person().dateOfBirth">
+    <input type="date" id="dateOfBirth" [ngModel]="formData().dateOfBirth" (ngModelChange)="updateField('dateOfBirth', $event)">
   </div>
 
   <div class="form-group">
     <label for="photoFileName">Photo File Name</label>
-    <input type="text" id="photoFileName" [(ngModel)]="person().photoFileName" placeholder="e.g. pastor-smith.webp">
+    <input type="text" id="photoFileName" [ngModel]="formData().photoFileName" (ngModelChange)="updateField('photoFileName', $event)" placeholder="e.g. pastor-smith.webp">
   </div>
 
   <div class="form-group">
     <label for="biography">Biography</label>
-    <textarea id="biography" [(ngModel)]="person().biography" rows="4"></textarea>
+    <textarea id="biography" [ngModel]="formData().biography" (ngModelChange)="updateField('biography', $event)" rows="4"></textarea>
   </div>
 
   <div class="actions">

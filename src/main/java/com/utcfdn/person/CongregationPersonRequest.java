@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CongregationPersonRequest {
-    private PersonDto person;
+    private Long personId;
     private String position;
 }
