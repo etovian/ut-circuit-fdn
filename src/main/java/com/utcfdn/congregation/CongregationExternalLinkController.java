@@ -29,8 +29,7 @@ public class CongregationExternalLinkController {
     }
 
     @PutMapping("/{linkId}")
-    public CongregationExternalLinkDto updateLink(@PathVariable Long congregationId,
-                                                 @PathVariable Long linkId,
+    public CongregationExternalLinkDto updateLink(@PathVariable Long linkId,
                                                  @RequestBody CongregationExternalLinkDto dto) {
         CongregationExternalLinkEntity entity = congregationExternalLinkMapper.toEntity(dto, null);
         return congregationExternalLinkMapper.toDto(
@@ -38,7 +37,7 @@ public class CongregationExternalLinkController {
     }
 
     @DeleteMapping("/{linkId}")
-    public ResponseEntity<Void> deleteLink(@PathVariable Long congregationId, @PathVariable Long linkId) {
+    public ResponseEntity<Void> deleteLink(@PathVariable Long linkId) {
         congregationExternalLinkService.deleteLink(linkId);
         return ResponseEntity.noContent().build();
     }
