@@ -1,8 +1,9 @@
 package com.utcfdn.congregation;
 
 public enum ExternalLinkType {
-    WEBSITE,
     FACEBOOK,
-    YOUTUBE,
-    SUBSTACK
+    INSTAGRAM,
+    SUBSTACK,
+    WEBSITE,
+    YOUTUBE
 }

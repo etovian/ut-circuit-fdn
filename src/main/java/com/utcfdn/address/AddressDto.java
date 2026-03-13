@@ -1,4 +1,4 @@
-package com.utcfdn.congregation;
+package com.utcfdn.address;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

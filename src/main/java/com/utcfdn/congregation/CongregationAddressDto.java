@@ -1,5 +1,6 @@
 package com.utcfdn.congregation;
 
+import com.utcfdn.address.AddressDto;
 import com.utcfdn.address.AddressType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,9 @@
 export enum ExternalLinkType {
-  WEBSITE = 'WEBSITE',
   FACEBOOK = 'FACEBOOK',
-  YOUTUBE = 'YOUTUBE',
-  SUBSTACK = 'SUBSTACK'
+  INSTAGRAM = 'INSTAGRAM',
+  SUBSTACK = 'SUBSTACK',
+  WEBSITE = 'WEBSITE',
+  YOUTUBE = 'YOUTUBE'
 }
 
 export interface CongregationExternalLink {

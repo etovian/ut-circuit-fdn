@@ -1,5 +1,6 @@
 package com.utcfdn.congregation;
 
+import com.utcfdn.address.AddressDto;
 import com.utcfdn.address.AddressEntity;
 import com.utcfdn.person.PersonMapper;
 import lombok.RequiredArgsConstructor;
