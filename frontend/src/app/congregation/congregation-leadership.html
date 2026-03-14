@@ -2,7 +2,6 @@
   @if (persons.length > 0) {
     <section id="leadership" class="persons-section">
       <div class="section-header">
-        <div class="accent-bar"></div>
         <h2>Our Leadership & Staff</h2>
       </div>
       <div class="persons-grid" cdkDropList [cdkDropListData]="persons" (cdkDropListDropped)="drop($event)">

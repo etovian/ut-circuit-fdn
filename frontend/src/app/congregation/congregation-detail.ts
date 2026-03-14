@@ -32,6 +32,7 @@ export class CongregationDetail implements OnDestroy {
 
   congregation = signal<Congregation | undefined>(undefined);
   scheduledEvents = signal<ScheduledEvent[]>([]);
+  activeTab = signal<string>('events');
 
   constructor() {
     this.route.params.subscribe(params => {
@@ -48,6 +49,10 @@ export class CongregationDetail implements OnDestroy {
         });
       }
     });
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab.set(tab);
   }
 
   ngOnDestroy() {

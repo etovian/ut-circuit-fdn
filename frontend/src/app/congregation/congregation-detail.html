@@ -2,25 +2,39 @@
 <div class="church-container">
   <app-congregation-hero [church]="church"></app-congregation-hero>
 
+  <nav class="subtle-tabs">
+    <button (click)="setActiveTab('events')" [class.active]="activeTab() === 'events'">Events</button>
+    <button (click)="setActiveTab('about')" [class.active]="activeTab() === 'about'">About</button>
+    <button (click)="setActiveTab('location')" [class.active]="activeTab() === 'location'">Location</button>
+    <button (click)="setActiveTab('leadership')" [class.active]="activeTab() === 'leadership'">Leadership</button>
+    <button (click)="setActiveTab('links')" [class.active]="activeTab() === 'links'">Resources</button>
+  </nav>
+
   <main class="content-wrapper">
-    <app-congregation-events 
-      [events]="scheduledEvents()" 
-      [churchName]="church.name">
-    </app-congregation-events>
+    <div class="tab-content">
+      @if (activeTab() === 'about') {
+        <app-congregation-about [church]="church"></app-congregation-about>
+      }
 
-    <div class="horizontal-divider"></div>
+      @if (activeTab() === 'events') {
+        <app-congregation-events 
+          [events]="scheduledEvents()" 
+          [churchName]="church.name">
+        </app-congregation-events>
+      }
 
-    <app-congregation-about [church]="church"></app-congregation-about>
+      @if (activeTab() === 'location') {
+        <app-congregation-location [church]="church"></app-congregation-location>
+      }
 
-    <div class="horizontal-divider"></div>
+      @if (activeTab() === 'leadership') {
+        <app-congregation-leadership [church]="church"></app-congregation-leadership>
+      }
 
-    <app-congregation-location [church]="church"></app-congregation-location>
-
-    <div class="horizontal-divider"></div>
-
-    <app-congregation-links [church]="church"></app-congregation-links>
-
-    <app-congregation-leadership [church]="church"></app-congregation-leadership>
+      @if (activeTab() === 'links') {
+        <app-congregation-links [church]="church"></app-congregation-links>
+      }
+    </div>
   </main>
 
   <footer class="church-footer">

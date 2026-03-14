@@ -20,16 +20,66 @@
 }
 
 .content-wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
+  width: 100%;
+  padding: 0 5% 4rem 5%;
+  box-sizing: border-box;
 }
 
-.horizontal-divider {
-  height: 1px;
-  background: var(--gray-400);
-  opacity: 0.3;
-  margin: 5rem 0;
+.subtle-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 1.5rem 0;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid var(--gray-400);
+  position: sticky;
+  top: 0;
+  background: var(--cream);
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  background: oklch(from var(--cream) l c h / 0.85);
+  width: 100%;
+}
+
+.subtle-tabs button {
+  background: none;
+  border: none;
+  padding: 0.75rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gray-700);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.subtle-tabs button:hover {
+  color: var(--burgundy);
+}
+
+.subtle-tabs button.active {
+  color: var(--burgundy);
+}
+
+.subtle-tabs button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--burgundy);
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .church-footer {
