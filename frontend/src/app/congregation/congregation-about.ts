@@ -1,4 +1,4 @@
-import {Component, computed, inject, Input, signal} from '@angular/core';
+import {Component, inject, Input, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {MarkdownComponent} from 'ngx-markdown';
@@ -37,18 +37,6 @@ export class CongregationAbout {
 
   isEditingDescription = signal(false);
   editingDescriptionText = signal('');
-
-  googleMapsUrl = computed(() => {
-    const church = this._church();
-    if (!church) return undefined;
-
-    const physicalAddress = church.addresses?.find(a => a.addressType === 'PHYSICAL');
-    if (!physicalAddress) return undefined;
-
-    const addr = physicalAddress.address;
-    const query = `${church.name} ${addr.streetAddress} ${addr.city} ${addr.state} ${addr.zipCode}`;
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-  });
 
   openEditDescription() {
     const church = this._church();

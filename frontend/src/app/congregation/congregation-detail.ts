@@ -6,6 +6,7 @@ import {Congregation, ScheduledEvent} from './congregation.model';
 import {CongregationHero} from './congregation-hero';
 import {CongregationEvents} from './congregation-events';
 import {CongregationAbout} from './congregation-about';
+import {CongregationLocation} from './congregation-location';
 import {CongregationLinks} from './congregation-links';
 import {CongregationLeadership} from './congregation-leadership';
 
@@ -18,6 +19,7 @@ import {CongregationLeadership} from './congregation-leadership';
     CongregationHero, 
     CongregationEvents, 
     CongregationAbout, 
+    CongregationLocation,
     CongregationLinks, 
     CongregationLeadership
   ],
