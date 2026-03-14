@@ -37,6 +37,14 @@ public class CongregationService {
                 });
     }
 
+    public Optional<CongregationEntity> updateDescription(Long id, String description) {
+        return congregationRepository.findById(id)
+                .map(existing -> {
+                    existing.setDescription(description);
+                    return congregationRepository.save(existing);
+                });
+    }
+
     public boolean deleteCongregation(Long id) {
         if (congregationRepository.existsById(id)) {
             congregationRepository.deleteById(id);

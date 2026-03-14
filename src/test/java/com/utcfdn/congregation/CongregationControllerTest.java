@@ -37,4 +37,25 @@ class CongregationControllerTest {
                 .andExpect(jsonPath("$[0].name", notNullValue()))
                 .andExpect(jsonPath("$[0].addresses", notNullValue()));
     }
+
+    @Test
+    void testUpdateDescription() throws Exception {
+        // Seed some data
+        CongregationEntity entity = congregationService.saveCongregation(new CongregationEntity("Update Test", "Old Desc", "Mission"));
+        Long id = entity.getId();
+
+        String newDescription = "New Updated Description";
+
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/congregations/" + id + "/description")
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(newDescription))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", is(newDescription)));
+
+        // Verify in database
+        mockMvc.perform(get("/api/congregations/" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", is(newDescription)));
+    }
 }

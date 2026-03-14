@@ -58,8 +58,42 @@
       <div class="about-grid">
         <div class="about-text">
           <h2>About Our Congregation</h2>
-          <p>{{ church.description }}</p>
+          <markdown class="markdown-content" [data]="church.description"></markdown>
+          <div class="admin-inline-actions">
+            <button class="pill secondary small" (click)="openEditDescription()">
+              <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+                <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+              </svg>
+              Edit Description
+            </button>
+          </div>
         </div>
+
+    @if (isEditingDescription()) {
+      <div class="custom-modal-overlay" (click)="closeEditDescription()">
+        <div class="custom-modal large" (click)="$event.stopPropagation()">
+          <header class="custom-modal-header">
+            <h2>Edit Congregation Description</h2>
+            <button class="close-btn" (click)="closeEditDescription()">✕</button>
+          </header>
+          
+          <div class="custom-modal-body">
+            <md-editor 
+              [ngModel]="editingDescriptionText()" 
+              (ngModelChange)="editingDescriptionText.set($event)"
+              [options]="{ showPreviewPanel: true }"
+              height="100%"
+              name="description-editor">
+            </md-editor>
+          </div>
+
+          <footer class="custom-modal-actions">
+            <button type="button" class="btn secondary" (click)="closeEditDescription()">Cancel</button>
+            <button type="button" class="btn primary" (click)="saveDescription()">Save Changes</button>
+          </footer>
+        </div>
+      </div>
+    }
         <div class="location-info">
           <h3>Find Us</h3>
           @if (church.addresses && church.addresses.length > 0) {

@@ -43,6 +43,14 @@ public class CongregationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PatchMapping("/{id}/description")
+    public ResponseEntity<CongregationDto> updateDescription(@PathVariable Long id, @RequestBody String description) {
+        return congregationService.updateDescription(id, description)
+                .map(congregationMapper::toDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         return congregationService.deleteCongregation(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();

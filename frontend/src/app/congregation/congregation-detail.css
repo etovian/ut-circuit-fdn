@@ -111,6 +111,24 @@ h1 {
   margin-top: 2.5rem;
 }
 
+.admin-inline-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pill.small {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  background: var(--gray-100, oklch(95% 0.01 85));
+  color: var(--navy);
+  border: 1px solid var(--gray-400);
+}
+
 .pill:hover {
   transform: translateY(-2px);
   filter: brightness(1.1);
@@ -249,6 +267,30 @@ h2 {
   line-height: 1.8;
   color: var(--gray-700);
   margin-bottom: 1.5rem;
+}
+
+.markdown-content ::ng-deep p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--gray-700);
+  margin-bottom: 1.5rem;
+}
+
+.markdown-content ::ng-deep ul, .markdown-content ::ng-deep ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  color: var(--gray-700);
+  line-height: 1.8;
+}
+
+.markdown-content ::ng-deep li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content ::ng-deep h3, .markdown-content ::ng-deep h4 {
+  color: var(--navy);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 /* Links Section */

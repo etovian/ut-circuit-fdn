@@ -35,6 +35,20 @@ export class CongregationService {
     return this.http.put<void>(`${this.apiUrl}/${congregationId}/persons/reorder`, personIds);
   }
 
+  updateCongregation(id: number, congregation: Partial<Congregation>): Observable<Congregation> {
+    return this.http.put<Congregation>(`${this.apiUrl}/${id}`, congregation).pipe(
+      map(c => this.enrichCongregation(c))
+    );
+  }
+
+  updateDescription(id: number, description: string): Observable<Congregation> {
+    return this.http.patch<Congregation>(`${this.apiUrl}/${id}/description`, description, {
+      headers: { 'Content-Type': 'text/plain' }
+    }).pipe(
+      map(c => this.enrichCongregation(c))
+    );
+  }
+
   getSlug(name: string): string {
     return name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
   }
