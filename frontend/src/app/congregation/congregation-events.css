@@ -1,0 +1,137 @@
+.events-section {
+  display: block;
+}
+
+.section-header {
+  margin-bottom: 3rem;
+}
+
+.accent-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--burgundy);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  color: var(--navy);
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.event-card {
+  background: white;
+  padding: 0;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  display: flex;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+}
+
+.event-date {
+  background: var(--burgundy);
+  color: white;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  text-align: center;
+}
+
+.event-date .day {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.event-date .date {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.event-info {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.event-info h3 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.event-info .time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--burgundy);
+  margin: 0.25rem 0 0.75rem 0;
+}
+
+.event-info .desc {
+  font-size: 0.9375rem;
+  color: var(--gray-700);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.location-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  margin: 0;
+  opacity: 0.8;
+}
+
+.no-events {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  text-align: center;
+  color: var(--gray-700);
+  font-style: italic;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.admin-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.pill {
+  padding: 0.875rem 2rem;
+  border-radius: 2.75rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.pill.secondary {
+  background: var(--gray-100, oklch(95% 0.01 85));
+  color: var(--navy);
+  border: 1px solid var(--gray-400);
+}
+
+.pill:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}

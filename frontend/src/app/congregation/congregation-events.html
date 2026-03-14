@@ -1,0 +1,40 @@
+<section id="upcoming" class="events-section">
+  <div class="section-header">
+    <div class="accent-bar"></div>
+    <h2>Upcoming Events (Next 7 Days)</h2>
+  </div>
+  @if (events.length > 0) {
+    <div class="events-grid">
+      @for (event of events; track event.id) {
+        <div class="event-card">
+          <div class="event-date">
+            <span class="day">{{ event.startTime | date:'EEE' }}</span>
+            <span class="date">{{ event.startTime | date:'MMM d' }}</span>
+          </div>
+          <div class="event-info">
+            <h3>{{ event.name }}</h3>
+            <p class="time">{{ event.startTime | date:'h:mm a' }}</p>
+            <p class="desc">{{ event.description }}</p>
+            @if (event.location) {
+              <p class="location-detail">
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+                  <path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-75.5-184.5T480-812q-109 0-184.5 75.5T220-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-249T480-900q163 0 259.5 99T836-552q0 127-79.5 244.5T480-80Zm0-472Z"/>
+                </svg>
+                {{ event.location }}
+              </p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-events">
+      <p>No events scheduled for the next seven days.</p>
+    </div>
+  }
+  <div class="admin-actions">
+    <a [routerLink]="['/admin/congregation', slug, 'events']" class="pill secondary">
+      Manage Events
+    </a>
+  </div>
+</section>
