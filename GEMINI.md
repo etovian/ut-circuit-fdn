@@ -57,6 +57,9 @@ This project is a full-stack application consisting of a Spring Boot backend and
 - **Test**: `npm test`
 
 ## Development Conventions
+- **Search Tools**: `ripgrep` (rg) and `fzf` are installed via winget and should be used for efficient searching and filtering. Use their absolute paths if they are not available in the current shell session's PATH:
+  - `rg`: `C:\Users\Michael Green\AppData\Local\Microsoft\WinGet\Packages\BurntSushi.ripgrep.MSVC_Microsoft.Winget.Source_8wekyb3d8bbwe\ripgrep-15.1.0-x86_64-pc-windows-msvc\rg.exe`
+  - `fzf`: `C:\Users\Michael Green\AppData\Local\Microsoft\WinGet\Packages\junegunn.fzf_Microsoft.Winget.Source_8wekyb3d8bbwe\fzf.exe`
 - **Environment Interaction**: Connecting directly to the container (e.g., via `docker exec`) to perform non-development functions is preferred over writing ad hoc tests that will be deleted after execution.
 - **Caution**: Avoid use of deprecated features, when possible.
 - **Project Structure**: Organize with domain-driven package structure (`com.utcfdn.congregation`, `com.utcfdn.sermon`, etc.).
