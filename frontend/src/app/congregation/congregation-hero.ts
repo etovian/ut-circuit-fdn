@@ -19,6 +19,19 @@ export class CongregationHero implements OnDestroy {
     this.currentPhotoIndex.set(0);
     this.startPhotoRotation();
   }
+  get church(): Congregation | undefined { return this._church(); }
+
+  get location(): string {
+    const church = this._church();
+    if (!church) return '';
+    if (church.addresses && church.addresses.length > 0) {
+      const addr = church.addresses[0].address;
+      return `${addr.city}, ${addr.state}`;
+    }
+    if (church.location) return church.location;
+
+    return '';
+  }
 
   private _church = signal<Congregation | undefined>(undefined);
   currentPhotoIndex = signal(0);

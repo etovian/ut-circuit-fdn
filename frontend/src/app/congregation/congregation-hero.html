@@ -1,7 +1,7 @@
 <header class="hero" [style.background-image]="'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(' + currentPhotoUrl() + ')'">
   <div class="hero-overlay">
     <div class="hero-content">
-      <span class="location-tag">{{ church?.location || 'Utah' }}</span>
+      <span class="location-tag">{{ location }}</span>
       <h1>{{ church?.name }}</h1>
       <p class="tagline">{{ church?.mission }}</p>
     </div>
