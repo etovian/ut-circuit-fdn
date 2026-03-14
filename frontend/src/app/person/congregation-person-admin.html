@@ -54,12 +54,12 @@
     </section>
 
     @if (isModalOpen()) {
-      <div class="modal-overlay" (click)="closeModal()">
-        <div class="modal" (click)="$event.stopPropagation()">
+      <div class="admin-modal-overlay" (click)="closeModal()">
+        <div class="admin-modal" (click)="$event.stopPropagation()">
           <h2 class="section-title">Details & Position</h2>
-          <p class="modal-subtitle">Update person details and their position at {{ c.name }}.</p>
+          <p class="admin-modal-subtitle">Update person details and their position at {{ c.name }}.</p>
 
-          <div class="position-field modal-field">
+          <div class="position-field admin-modal-field">
             <label for="position">Position at {{ c.name }}</label>
             <input
               type="text"

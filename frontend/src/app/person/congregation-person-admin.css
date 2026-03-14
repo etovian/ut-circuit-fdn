@@ -109,7 +109,7 @@ h1 {
 }
 
 /* Modal */
-.modal-overlay {
+.admin-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
@@ -120,7 +120,7 @@ h1 {
   z-index: 1000;
 }
 
-.modal {
+.admin-modal {
   background: white;
   padding: 2.5rem;
   border-radius: 1.5rem;
@@ -131,14 +131,14 @@ h1 {
   overflow-y: auto;
 }
 
-.modal-subtitle {
+.admin-modal-subtitle {
   margin-bottom: 2rem;
   color: oklch(50% 0.02 85);
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
-.modal-field {
+.admin-modal-field {
   margin-bottom: 2rem;
   background: #f9f9f9;
   border-color: #eee;

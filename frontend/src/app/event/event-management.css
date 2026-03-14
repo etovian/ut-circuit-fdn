@@ -204,7 +204,7 @@ h1 { margin: 0; font-size: 2rem; }
 .event-time { font-weight: 700; margin-right: 0.4rem; }
 
 /* Modal */
-.modal-overlay {
+.admin-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
@@ -215,7 +215,7 @@ h1 { margin: 0; font-size: 2rem; }
   z-index: 1000;
 }
 
-.modal {
+.admin-modal {
   background: white;
   padding: 2.5rem;
   border-radius: 1rem;
@@ -224,7 +224,7 @@ h1 { margin: 0; font-size: 2rem; }
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
 }
 
-.modal-subtitle {
+.admin-modal-subtitle {
   margin-bottom: 2rem;
   color: oklch(50% 0.02 85);
   font-size: 0.9rem;
@@ -277,7 +277,7 @@ input, textarea {
   font-size: 1rem;
 }
 
-.modal-actions {
+.admin-modal-actions {
   display: flex;
   justify-content: space-between;
   gap: 1rem;

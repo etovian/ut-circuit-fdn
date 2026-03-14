@@ -188,7 +188,7 @@ h1 {
 }
 
 /* Modal */
-.modal-overlay {
+.admin-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
@@ -199,7 +199,7 @@ h1 {
   z-index: 1000;
 }
 
-.modal {
+.admin-modal {
   background: white;
   padding: 2.5rem;
   border-radius: 1.5rem;
@@ -234,7 +234,7 @@ h1 {
   resize: vertical;
 }
 
-.modal-actions {
+.admin-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;

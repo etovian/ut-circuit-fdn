@@ -96,8 +96,8 @@
 
   <!-- Template Edit Modal -->
   @if (isEditingTemplate()) {
-  <div class="modal-overlay">
-    <div class="modal">
+  <div class="admin-modal-overlay">
+    <div class="admin-modal">
       <h3>{{ currentTemplate().id ? 'Edit' : 'Create' }} Event Pattern</h3>
       <form (ngSubmit)="saveTemplate()" #templateForm="ngForm" class="admin-form">
         <div class="form-group">
@@ -167,7 +167,7 @@
           <input type="text" [(ngModel)]="currentTemplate().location" name="location" placeholder="Defaults to church address">
         </div>
 
-        <div class="modal-actions">
+        <div class="admin-modal-actions">
           <button type="button" class="btn secondary" (click)="isEditingTemplate.set(false)">Cancel</button>
           <button type="submit" class="btn primary" [disabled]="!templateForm.valid || selectedDays().length === 0">Save Pattern</button>
         </div>
@@ -178,10 +178,10 @@
 
   <!-- Instance Override Modal -->
   @if (isEditingInstance()) {
-  <div class="modal-overlay">
-    <div class="modal">
+  <div class="admin-modal-overlay">
+    <div class="admin-modal">
       <h3>Edit Specific Occurrence</h3>
-      <p class="modal-subtitle">Changing this will only affect the event on {{ currentInstance().startTime | date:'fullDate' }}.</p>
+      <p class="admin-modal-subtitle">Changing this will only affect the event on {{ currentInstance().startTime | date:'fullDate' }}.</p>
       
       <form (ngSubmit)="saveInstanceOverride()" #instanceForm="ngForm" class="admin-form">
         <div class="form-group">
@@ -199,7 +199,7 @@
           <textarea [(ngModel)]="currentInstance().description" name="description" rows="3"></textarea>
         </div>
 
-        <div class="modal-actions">
+        <div class="admin-modal-actions">
           <button type="button" class="btn secondary" (click)="isEditingInstance.set(false)">Close</button>
           <div class="danger-actions">
             <button type="button" class="btn danger outline" (click)="cancelInstance(currentInstance().id!); isEditingInstance.set(false)">Cancel Only This</button>
