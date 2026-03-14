@@ -69,11 +69,10 @@
 }
 
 .hub-hero {
-  background: linear-gradient(rgba(0,51,102,0.8), rgba(0,51,102,0.8)),
-              url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1600');
+  background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1600');
   background-size: cover;
   background-position: center;
-  color: white;
+  color: var(--lcms-blue);
   padding: 3rem 2rem;
   text-align: center;
 }
