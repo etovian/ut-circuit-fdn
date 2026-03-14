@@ -80,6 +80,31 @@
   transform: scaleX(1);
 }
 
+.home-button {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.home-button:hover {
+  background: rgba(0, 0, 0, 0.5);
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
 .tab-content {
   display: grid;
   grid-template-columns: 1fr;
@@ -87,25 +112,6 @@
 
 .tab-content > * {
   grid-area: 1 / 1;
-}
-
-.church-footer {
-  padding: 4rem 2rem;
-  background: white;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--gray-700);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.back-link:hover {
-  color: var(--burgundy);
 }
 
 .loading {
