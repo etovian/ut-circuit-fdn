@@ -9,22 +9,34 @@ import {CongregationAbout} from './congregation-about';
 import {CongregationLocation} from './congregation-location';
 import {CongregationLinks} from './congregation-links';
 import {CongregationLeadership} from './congregation-leadership';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-congregation-detail',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterLink, 
-    CongregationHero, 
-    CongregationEvents, 
-    CongregationAbout, 
+    CommonModule,
+    RouterLink,
+    CongregationHero,
+    CongregationEvents,
+    CongregationAbout,
     CongregationLocation,
-    CongregationLinks, 
+    CongregationLinks,
     CongregationLeadership
   ],
   templateUrl: './congregation-detail.html',
-  styleUrl: './congregation-detail.css'
+  styleUrl: './congregation-detail.css',
+  animations: [
+    trigger('tabAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
+      ])
+    ])
+  ]
 })
 export class CongregationDetail implements OnDestroy {
   private route = inject(ActivatedRoute);

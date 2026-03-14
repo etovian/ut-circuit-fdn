@@ -13,26 +13,26 @@
   <main class="content-wrapper">
     <div class="tab-content">
       @if (activeTab() === 'about') {
-        <app-congregation-about [church]="church"></app-congregation-about>
+        <app-congregation-about @tabAnimation [church]="church"></app-congregation-about>
       }
 
       @if (activeTab() === 'events') {
-        <app-congregation-events 
+        <app-congregation-events @tabAnimation 
           [events]="scheduledEvents()" 
           [churchName]="church.name">
         </app-congregation-events>
       }
 
       @if (activeTab() === 'location') {
-        <app-congregation-location [church]="church"></app-congregation-location>
+        <app-congregation-location @tabAnimation [church]="church"></app-congregation-location>
       }
 
       @if (activeTab() === 'leadership') {
-        <app-congregation-leadership [church]="church"></app-congregation-leadership>
+        <app-congregation-leadership @tabAnimation [church]="church"></app-congregation-leadership>
       }
 
       @if (activeTab() === 'links') {
-        <app-congregation-links [church]="church"></app-congregation-links>
+        <app-congregation-links @tabAnimation [church]="church"></app-congregation-links>
       }
     </div>
   </main>
