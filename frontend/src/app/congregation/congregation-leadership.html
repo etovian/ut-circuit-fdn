@@ -4,9 +4,9 @@
       <div class="section-header">
         <h2>Our Leadership & Staff</h2>
       </div>
-      <div class="persons-grid" cdkDropList [cdkDropListData]="persons" (cdkDropListDropped)="drop($event)">
+      <div class="persons-grid">
         @for (person of persons; track person.id) {
-          <div class="person-card" cdkDrag>
+          <div class="person-card">
             <div class="person-avatar">
               @if (person.photoUrl) {
                 <img [src]="person.photoUrl" [alt]="person.firstName + ' ' + person.lastName">
