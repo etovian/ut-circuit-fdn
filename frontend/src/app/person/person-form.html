@@ -41,6 +41,10 @@
     <textarea id="biography" [ngModel]="formData().biography" (ngModelChange)="updateField('biography', $event)" rows="4"></textarea>
   </div>
 
+  <app-person-contact-info-admin
+    [contactInfos]="formData().contactInfos || []"
+  ></app-person-contact-info-admin>
+
   <div class="actions">
     <button type="button" class="secondary" (click)="onCancel()">Cancel</button>
     <button type="button" class="primary" (click)="onSave()">Save Person</button>

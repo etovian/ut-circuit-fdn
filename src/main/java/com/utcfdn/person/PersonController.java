@@ -49,9 +49,8 @@ public class PersonController {
     public ResponseEntity<PersonDto> update(@PathVariable Long id, @RequestBody PersonDto personDto) {
         return personService.findById(id)
                 .map(existingPerson -> {
-                    PersonEntity updatedEntity = personMapper.toEntity(personDto);
-                    updatedEntity.setId(id); // Ensure ID is preserved
-                    return ResponseEntity.ok(personMapper.toDto(personService.save(updatedEntity)));
+                    personMapper.updateEntity(existingPerson, personDto);
+                    return ResponseEntity.ok(personMapper.toDto(personService.save(existingPerson)));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

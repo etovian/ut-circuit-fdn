@@ -1,11 +1,12 @@
 import {Component, effect, input, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Person} from './person.model';
+import {PersonContactInfoAdmin} from './person-contact-info-admin';
 
 @Component({
   selector: 'app-person-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, PersonContactInfoAdmin],
   templateUrl: './person-form.html',
   styleUrl: './person-form.css'
 })
@@ -24,7 +25,11 @@ export class PersonForm {
   constructor() {
     // Update local state when input changes
     effect(() => {
-      this.formData.set({ ...this.person() });
+      const p = this.person();
+      this.formData.set({ 
+        ...p,
+        contactInfos: p.contactInfos ? [...p.contactInfos.map(ci => ({...ci}))] : []
+      });
     });
   }
 

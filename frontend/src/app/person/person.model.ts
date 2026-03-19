@@ -1,3 +1,10 @@
+export interface PersonContactInfo {
+  id?: number;
+  personId?: number;
+  contactInfoType: 'PHONE_NUMBER' | 'EMAIL';
+  contactValue: string;
+}
+
 export interface Person {
   id?: number;
   title?: string;
@@ -9,6 +16,7 @@ export interface Person {
   photoFileName?: string;
   biography?: string;
   congregations?: CongregationRelation[];
+  contactInfos?: PersonContactInfo[];
 }
 
 export interface CongregationRelation {

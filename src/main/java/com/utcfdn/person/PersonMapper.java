@@ -43,7 +43,7 @@ public class PersonMapper {
             return null;
         }
 
-        return PersonEntity.builder()
+        PersonEntity entity = PersonEntity.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .firstName(dto.getFirstName())
@@ -54,6 +54,39 @@ public class PersonMapper {
                 .photoFileName(dto.getPhotoFileName())
                 .biography(dto.getBiography())
                 .build();
+
+        if (dto.getContactInfos() != null) {
+            entity.setContactInfos(dto.getContactInfos().stream()
+                    .map(contactInfoMapper::toEntity)
+                    .peek(contactInfo -> contactInfo.setPerson(entity))
+                    .collect(Collectors.toList()));
+        }
+
+        return entity;
+    }
+
+    public void updateEntity(PersonEntity entity, PersonDto dto) {
+        if (entity == null || dto == null) {
+            return;
+        }
+
+        entity.setTitle(dto.getTitle());
+        entity.setFirstName(dto.getFirstName());
+        entity.setMiddleName(dto.getMiddleName());
+        entity.setLastName(dto.getLastName());
+        entity.setSuffix(dto.getSuffix());
+        entity.setDateOfBirth(dto.getDateOfBirth());
+        entity.setPhotoFileName(dto.getPhotoFileName());
+        entity.setBiography(dto.getBiography());
+
+        entity.getContactInfos().clear();
+        if (dto.getContactInfos() != null) {
+            dto.getContactInfos().forEach(ciDto -> {
+                PersonContactInfoEntity ciEntity = contactInfoMapper.toEntity(ciDto);
+                ciEntity.setPerson(entity);
+                entity.getContactInfos().add(ciEntity);
+            });
+        }
     }
 
     public CongregationRelationDto toCongregationRelationDto(CongregationPersonEntity relation) {

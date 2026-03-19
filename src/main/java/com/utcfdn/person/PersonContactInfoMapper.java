@@ -27,14 +27,16 @@ public class PersonContactInfoMapper {
             return null;
         }
 
-        PersonEntity person = personRepository.findById(dto.getPersonId())
-                .orElseThrow(() -> new IllegalArgumentException("Person not found with id: " + dto.getPersonId()));
-
-        return PersonContactInfoEntity.builder()
+        PersonContactInfoEntity entity = PersonContactInfoEntity.builder()
                 .id(dto.getId())
-                .person(person)
                 .contactInfoType(dto.getContactInfoType())
                 .contactValue(dto.getContactValue())
                 .build();
+
+        if (dto.getPersonId() != null) {
+            personRepository.findById(dto.getPersonId()).ifPresent(entity::setPerson);
+        }
+
+        return entity;
     }
 }
