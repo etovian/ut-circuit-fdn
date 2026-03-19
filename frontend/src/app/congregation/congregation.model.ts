@@ -26,6 +26,7 @@ export interface PersonRelation {
   lastName: string;
   position: string;
   photoUrl?: string;
+  biography?: string;
   sortOrdinalValue: number;
   contactInfos?: {
     id?: number;

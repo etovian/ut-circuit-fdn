@@ -117,6 +117,7 @@ public class PersonMapper {
                 .lastName(relation.getPerson().getLastName())
                 .position(relation.getPosition())
                 .photoUrl(photoUrl)
+                .biography(relation.getPerson().getBiography())
                 .sortOrdinalValue(relation.getSortOrdinalValue())
                 .contactInfos(relation.getPerson().getContactInfos() != null ?
                         relation.getPerson().getContactInfos().stream()

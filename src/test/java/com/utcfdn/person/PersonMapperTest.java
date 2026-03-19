@@ -99,6 +99,8 @@ class PersonMapperTest {
                 .sortOrdinalValue(10)
                 .build();
 
+        person.setBiography("This is a test bio.");
+
         PersonRelationDto dto = personMapper.toPersonRelationDto(relation);
 
         assertNotNull(dto);
@@ -106,6 +108,7 @@ class PersonMapperTest {
         assertEquals("John", dto.getFirstName());
         assertEquals("Doe", dto.getLastName());
         assertEquals("Pastor", dto.getPosition());
+        assertEquals("This is a test bio.", dto.getBiography());
         assertEquals(10, dto.getSortOrdinalValue());
         assertNotNull(dto.getContactInfos());
     }

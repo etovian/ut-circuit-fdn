@@ -17,6 +17,7 @@ public class PersonRelationDto {
     private String lastName;
     private String position;
     private String photoUrl;
+    private String biography;
     private Integer sortOrdinalValue;
     private List<PersonContactInfoDto> contactInfos;
 }

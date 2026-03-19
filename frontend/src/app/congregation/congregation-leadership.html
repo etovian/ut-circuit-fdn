@@ -6,7 +6,7 @@
       </div>
       <div class="persons-grid">
         @for (person of persons; track person.id) {
-          <div class="person-card">
+          <div class="person-card" (click)="openModal(person)">
             <div class="person-avatar">
               @if (person.photoUrl) {
                 <img [src]="person.photoUrl" [alt]="person.firstName + ' ' + person.lastName">
@@ -35,4 +35,34 @@
       </div>
     </section>
   }
+}
+
+@if (selectedPerson(); as person) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()">&times;</button>
+      <div class="modal-body">
+        <div class="modal-person-header">
+          <div class="modal-avatar">
+            @if (person.photoUrl) {
+              <img [src]="person.photoUrl" [alt]="person.firstName + ' ' + person.lastName">
+            } @else {
+              {{ person.firstName.charAt(0) }}{{ person.lastName.charAt(0) }}
+            }
+          </div>
+          <div class="modal-person-titles">
+            <h3>{{ person.firstName }} {{ person.lastName }}</h3>
+            <p class="position">{{ person.position }}</p>
+          </div>
+        </div>
+        <div class="modal-biography">
+          @if (person.biography) {
+            <p>{{ person.biography }}</p>
+          } @else {
+            <p class="no-bio">No biography available.</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
 }
