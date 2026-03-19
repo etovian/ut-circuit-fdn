@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PersonMapper {
 
+    private final PersonContactInfoMapper contactInfoMapper;
+
     public PersonDto toDto(PersonEntity entity) {
         if (entity == null) {
             return null;
@@ -28,6 +30,10 @@ public class PersonMapper {
                 .congregations(entity.getCongregations() != null ?
                         entity.getCongregations().stream()
                                 .map(this::toCongregationRelationDto)
+                                .collect(Collectors.toList()) : Collections.emptyList())
+                .contactInfos(entity.getContactInfos() != null ?
+                        entity.getContactInfos().stream()
+                                .map(contactInfoMapper::toDto)
                                 .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }

@@ -46,4 +46,8 @@ public class PersonEntity {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CongregationPersonEntity> congregations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<PersonContactInfoEntity> contactInfos = new ArrayList<>();
 }

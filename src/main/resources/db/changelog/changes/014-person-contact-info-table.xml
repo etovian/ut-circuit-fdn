@@ -16,7 +16,7 @@
             <column name="contact_info_type" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="value" type="VARCHAR(255)">
+            <column name="contact_value" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

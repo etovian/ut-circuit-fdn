@@ -26,4 +26,7 @@ public class PersonDto {
 
     @Builder.Default
     private List<CongregationRelationDto> congregations = new ArrayList<>();
+
+    @Builder.Default
+    private List<PersonContactInfoDto> contactInfos = new ArrayList<>();
 }

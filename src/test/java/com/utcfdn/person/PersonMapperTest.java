@@ -3,20 +3,28 @@ package com.utcfdn.person;
 import com.utcfdn.congregation.CongregationEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(MockitoExtension.class)
 class PersonMapperTest {
 
     private PersonMapper personMapper;
 
+    @Mock
+    private PersonContactInfoMapper contactInfoMapper;
+
     @BeforeEach
     void setUp() {
-        personMapper = new PersonMapper();
+        personMapper = new PersonMapper(contactInfoMapper);
     }
 
     @Test
@@ -41,6 +49,7 @@ class PersonMapperTest {
                 .build();
 
         person.setCongregations(List.of(relation));
+        person.setContactInfos(Collections.emptyList());
 
         PersonDto dto = personMapper.toDto(person);
 
