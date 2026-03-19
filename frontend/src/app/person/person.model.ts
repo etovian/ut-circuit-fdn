@@ -37,4 +37,5 @@ export interface PersonRelation {
   position: string;
   photoUrl?: string;
   sortOrdinalValue?: number;
+  contactInfos?: PersonContactInfo[];
 }

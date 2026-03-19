@@ -17,6 +17,13 @@
             <div class="person-info">
               <h3>{{ person.firstName }} {{ person.lastName }}</h3>
               <p class="position">{{ person.position }}</p>
+              @if (person.contactInfos && person.contactInfos.length > 0) {
+                <div class="person-contact">
+                  @for (contact of person.contactInfos; track contact.id) {
+                    <div class="contact-value">{{ contact.contactValue }}</div>
+                  }
+                </div>
+              }
             </div>
           </div>
         }

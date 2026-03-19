@@ -76,4 +76,37 @@ class PersonMapperTest {
         assertEquals("John", entity.getFirstName());
         assertEquals("Doe", entity.getLastName());
     }
+
+    @Test
+    void testToPersonRelationDto() {
+        PersonEntity person = PersonEntity.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .contactInfos(Collections.emptyList())
+                .build();
+
+        CongregationEntity congregation = CongregationEntity.builder()
+                .id(2L)
+                .name("Redeemer")
+                .build();
+
+        CongregationPersonEntity relation = CongregationPersonEntity.builder()
+                .id(new CongregationPersonId(2L, 1L))
+                .congregation(congregation)
+                .person(person)
+                .position("Pastor")
+                .sortOrdinalValue(10)
+                .build();
+
+        PersonRelationDto dto = personMapper.toPersonRelationDto(relation);
+
+        assertNotNull(dto);
+        assertEquals(1L, dto.getId());
+        assertEquals("John", dto.getFirstName());
+        assertEquals("Doe", dto.getLastName());
+        assertEquals("Pastor", dto.getPosition());
+        assertEquals(10, dto.getSortOrdinalValue());
+        assertNotNull(dto.getContactInfos());
+    }
 }

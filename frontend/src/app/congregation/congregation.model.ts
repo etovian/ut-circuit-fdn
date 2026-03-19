@@ -27,6 +27,10 @@ export interface PersonRelation {
   position: string;
   photoUrl?: string;
   sortOrdinalValue: number;
+  contactInfos?: {
+    id?: number;
+    contactValue: string;
+  }[];
 }
 
 export interface Congregation {

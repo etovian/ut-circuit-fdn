@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,4 +18,5 @@ public class PersonRelationDto {
     private String position;
     private String photoUrl;
     private Integer sortOrdinalValue;
+    private List<PersonContactInfoDto> contactInfos;
 }

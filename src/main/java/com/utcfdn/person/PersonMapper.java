@@ -118,6 +118,10 @@ public class PersonMapper {
                 .position(relation.getPosition())
                 .photoUrl(photoUrl)
                 .sortOrdinalValue(relation.getSortOrdinalValue())
+                .contactInfos(relation.getPerson().getContactInfos() != null ?
+                        relation.getPerson().getContactInfos().stream()
+                                .map(contactInfoMapper::toDto)
+                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 }

@@ -1,7 +1,7 @@
 <div class="admin-container">
   @if (congregation(); as c) {
     <header>
-      <a [routerLink]="['/admin/congregations', slug()]" class="back-link">
+      <a [routerLink]="['/', slug()]" class="back-link">
         ← Back to {{ c.name }}
       </a>
       <h1>People Management</h1>
