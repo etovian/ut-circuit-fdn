@@ -5,6 +5,18 @@
   border-radius: 1rem;
 }
 
+.location-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+.address-details {
+  display: flex;
+  flex-direction: column;
+}
+
 .location-info h3 {
   color: var(--gold);
   margin-top: 0;
@@ -13,6 +25,22 @@
 
 .address-entry {
   margin-bottom: 2rem;
+}
+
+.map-thumbnail {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  line-height: 0;
+  height: 100%;
+  min-height: 300px;
+}
+
+.map-thumbnail iframe {
+  filter: grayscale(20%) contrast(110%);
+  height: 100%;
+  border: 0;
 }
 
 .address-type {
@@ -40,4 +68,16 @@ address {
   font-weight: 600;
   padding-top: 1rem;
   border-top: 1px solid rgba(255,255,255,0.2);
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .map-thumbnail {
+    height: 300px;
+    order: -1;
+  }
 }
