@@ -62,7 +62,8 @@ export class CongregationPersonAdmin {
     this.isModalOpen.set(true);
   }
 
-  onSave(person: Person) {
+  onSave(event: { person: Person, position: string }) {
+    const { person, position } = event;
     const c = this.congregation();
     if (!c || !c.id) return;
 
@@ -72,7 +73,7 @@ export class CongregationPersonAdmin {
 
     personObs.subscribe(savedPerson => {
       if (savedPerson.id) {
-        this.personService.addPersonToCongregation(c.id!, savedPerson.id, this.position)
+        this.personService.addPersonToCongregation(c.id!, savedPerson.id, position)
           .subscribe(() => {
             this.toastService.success('Person details and congregation association saved successfully!');
             this.loadCongregationPersons(c.id!);

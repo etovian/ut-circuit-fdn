@@ -15,12 +15,16 @@ export class PersonForm {
     firstName: '',
     lastName: ''
   });
+  position = input<string>('');
+  congregationName = input<string>('');
 
-  save = output<Person>();
+  save = output<{ person: Person, position: string }>();
   cancel = output<void>();
 
   // Local state for the form
   formData = signal<Person>({ firstName: '', lastName: '' });
+  formDataPosition = signal<string>('');
+  activeTab = signal<'name-position' | 'biographical' | 'contact'>('name-position');
 
   constructor() {
     // Update local state when input changes
@@ -31,6 +35,10 @@ export class PersonForm {
         contactInfos: p.contactInfos ? [...p.contactInfos.map(ci => ({...ci}))] : []
       });
     });
+
+    effect(() => {
+      this.formDataPosition.set(this.position());
+    });
   }
 
   updateField(field: keyof Person, value: any) {
@@ -40,11 +48,22 @@ export class PersonForm {
     }));
   }
 
+  updatePosition(value: string) {
+    this.formDataPosition.set(value);
+  }
+
   onSave() {
-    this.save.emit(this.formData());
+    this.save.emit({
+      person: this.formData(),
+      position: this.formDataPosition()
+    });
   }
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  setActiveTab(tab: 'name-position' | 'biographical' | 'contact') {
+    this.activeTab.set(tab);
   }
 }

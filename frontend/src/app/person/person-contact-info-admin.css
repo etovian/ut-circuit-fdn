@@ -1,7 +1,4 @@
 .contact-info-admin {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color, #ddd);
 }
 .field-label {
   font-size: 0.9rem;
@@ -22,8 +19,21 @@
   gap: 0.5rem;
   align-items: center;
 }
+.type-select, .value-input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.type-select:focus, .value-input:focus {
+  outline: none;
+  border-color: oklch(53.18% 0.28 296.97); /* electric-violet */
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+}
 .type-select {
-  width: 120px;
+  width: 140px;
 }
 .value-input {
   flex: 1;

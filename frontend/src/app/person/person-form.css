@@ -1,14 +1,56 @@
 .person-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
-  max-width: 600px;
   width: 100%;
+  overflow: hidden;
+}
+
+.tabs-header {
+  display: flex;
+  background: #fcfcfc;
+  border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  background: none;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  font-size: 0.9rem;
+}
+
+.tab-btn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.tab-btn.active {
+  color: oklch(53.18% 0.28 296.97); /* electric-violet */
+  border-bottom-color: oklch(53.18% 0.28 296.97);
+  background: white;
+}
+
+.tabs-content {
+  padding: 2rem 2rem 1.5rem 2rem;
+  min-height: 420px;
+}
+
+.tab-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .form-group {
@@ -53,7 +95,7 @@ textarea {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  padding: 0 2rem 2rem 2rem;
 }
 
 button {
