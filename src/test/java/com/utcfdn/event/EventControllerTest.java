@@ -68,7 +68,7 @@ class EventControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("New Template"))
-                .andExpect(jsonPath("$.active").value(true));
+                .andExpect(jsonPath("$.isActive").value(true));
     }
 
     @Test
@@ -109,7 +109,7 @@ class EventControllerTest {
 
         mockMvc.perform(patch("/api/events/scheduled/" + instance.getId() + "/cancel"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.cancelled").value(true));
+                .andExpect(jsonPath("$.isCancelled").value(true));
     }
 
     @Test
@@ -142,7 +142,7 @@ class EventControllerTest {
                 .content(objectMapper.writeValueAsString(overrideDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Overridden Name"))
-                .andExpect(jsonPath("$.override").value(true));
+                .andExpect(jsonPath("$.isOverride").value(true));
     }
 
     @Test
