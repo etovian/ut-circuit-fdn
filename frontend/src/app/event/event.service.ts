@@ -16,6 +16,10 @@ export class EventService {
     return this.http.get<ScheduledEventInstance[]>(`${this.apiUrl}/scheduled?congregationId=${congregationId}&start=${start}&end=${end}`);
   }
 
+  getCircuitEvents(): Observable<ScheduledEventInstance[]> {
+    return this.http.get<ScheduledEventInstance[]>(`${this.apiUrl}/circuit/scheduled/next-thirty-days`);
+  }
+
   // --- Administrative ---
 
   getTemplates(congregationId?: number): Observable<EventTemplate[]> {

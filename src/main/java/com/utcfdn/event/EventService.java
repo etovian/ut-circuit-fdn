@@ -51,6 +51,7 @@ public class EventService {
                 .durationMinutes(dto.getDurationMinutes())
                 .recurrenceRule(dto.getRecurrenceRule())
                 .isActive(true)
+                .isCircuitEvent(dto.isCircuitEvent())
                 .build();
         
         EventTemplateDto result = mapToTemplateDto(templateRepository.save(entity));
@@ -70,6 +71,7 @@ public class EventService {
             existing.setDurationMinutes(dto.getDurationMinutes());
             existing.setRecurrenceRule(dto.getRecurrenceRule());
             existing.setActive(dto.isActive());
+            existing.setCircuitEvent(dto.isCircuitEvent());
             EventTemplateDto result = mapToTemplateDto(templateRepository.save(existing));
             schedulingTaskProvider.ifAvailable(EventSchedulingTask::scheduleEventsForNext30Days);
             return result;
@@ -121,6 +123,7 @@ public class EventService {
             instance.setStartTime(dto.getStartTime());
             instance.setEndTime(dto.getStartTime().plusMinutes(dto.getDurationMinutes()));
             instance.setOverride(true);
+            instance.setCircuitEvent(dto.isCircuitEvent());
             return mapToDto(instanceRepository.save(instance));
         });
     }
@@ -138,6 +141,7 @@ public class EventService {
                 .durationMinutes(entity.getDurationMinutes())
                 .recurrenceRule(entity.getRecurrenceRule())
                 .isActive(entity.isActive())
+                .isCircuitEvent(entity.isCircuitEvent())
                 .build();
     }
 
@@ -169,6 +173,7 @@ public class EventService {
                 .location(entity.getLocation())
                 .isCancelled(entity.isCancelled())
                 .isOverride(entity.isOverride())
+                .isCircuitEvent(entity.isCircuitEvent())
                 .build();
     }
 
@@ -270,6 +275,15 @@ public class EventService {
         return occurrences;
     }
 
+    @Transactional(readOnly = true)
+    public List<EventOccurrenceDto> getCircuitScheduledInstances(LocalDateTime start, LocalDateTime end) {
+        return instanceRepository.findByIsCircuitEventTrueAndStartTimeBetween(start, end).stream()
+                .filter(i -> !i.isCancelled())
+                .map(this::mapToDto)
+                .sorted((a, b) -> a.getStartTime().compareTo(b.getStartTime()))
+                .collect(Collectors.toList());
+    }
+
     private EventOccurrenceDto mapToDto(EventTemplateEntity template, LocalDateTime originalStart, ScheduledEventInstanceEntity override) {
         return EventOccurrenceDto.builder()
                 .templateId(template.getId())
@@ -281,6 +295,7 @@ public class EventService {
                 .location(override != null ? override.getLocation() : template.getLocation())
                 .isCancelled(override != null && override.isCancelled())
                 .isOverride(override != null && override.isOverride())
+                .isCircuitEvent(override != null ? override.isCircuitEvent() : template.isCircuitEvent())
                 .build();
     }
 

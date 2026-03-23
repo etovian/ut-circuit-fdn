@@ -10,6 +10,7 @@ export interface EventTemplate {
   durationMinutes: number;
   recurrenceRule: string; // RFC 5545 RRULE
   isActive: boolean;
+  isCircuitEvent: boolean;
 }
 
 export interface ScheduledEventInstance {
@@ -23,4 +24,5 @@ export interface ScheduledEventInstance {
   location?: string;
   isCancelled: boolean;
   isOverride: boolean;
+  isCircuitEvent: boolean;
 }

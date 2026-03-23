@@ -62,4 +62,8 @@ public class EventTemplateEntity {
     @Column(name = "is_active")
     @Builder.Default
     private boolean isActive = true;
+
+    @Column(name = "is_circuit_event")
+    @Builder.Default
+    private boolean isCircuitEvent = false;
 }

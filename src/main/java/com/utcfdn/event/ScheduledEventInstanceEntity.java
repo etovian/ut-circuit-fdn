@@ -46,4 +46,7 @@ public class ScheduledEventInstanceEntity {
 
     @Column(name = "is_cancelled", nullable = false)
     private boolean isCancelled;
+
+    @Column(name = "is_circuit_event", nullable = false)
+    private boolean isCircuitEvent;
 }

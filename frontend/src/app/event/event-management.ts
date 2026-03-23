@@ -189,7 +189,8 @@ export class EventManagement {
         startTime: '10:00:00',
         durationMinutes: 60,
         recurrenceRule: `FREQ=WEEKLY;BYDAY=${dayOfWeek}`,
-        isActive: true
+        isActive: true,
+        isCircuitEvent: false
       });
       this.selectedDays.set([dayOfWeek]);
       
@@ -239,8 +240,13 @@ export class EventManagement {
     });
   }
 
-  editInstance(instance: ScheduledEventInstance) {
-    this.currentInstance.set({ ...instance });
+  editInstance(instance: any) {
+    // Backend may return 'circuitEvent' instead of 'isCircuitEvent' due to Jackson boolean naming conventions
+    const normalizedInstance = { 
+      ...instance,
+      isCircuitEvent: instance.isCircuitEvent ?? instance.circuitEvent ?? false
+    };
+    this.currentInstance.set(normalizedInstance);
     this.isEditingInstance.set(true);
   }
 

@@ -19,4 +19,5 @@
     <include file="db/changelog/changes/012-add-sort-ordinal-to-congregation-person.xml"/>
     <include file="db/changelog/changes/013-external-link-table.xml"/>
     <include file="db/changelog/changes/014-person-contact-info-table.xml"/>
+    <include file="db/changelog/changes/015-add-is-circuit-event-to-events.xml"/>
 </databaseChangeLog>

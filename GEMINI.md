@@ -86,3 +86,4 @@ This project is a full-stack application consisting of a Spring Boot backend and
 
 ## Requirements
 - When given a requirements file to process, implement all the unmet requirements listed in it.  Be sure to report your progress and update each requirement in the file when you are finished with the implementation.
+- Whenever asked to create a plan or requirements document, you will write a .md file to the /plan directory.

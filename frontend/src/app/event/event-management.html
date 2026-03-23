@@ -167,6 +167,13 @@
           <input type="text" [(ngModel)]="currentTemplate().location" name="location" placeholder="Defaults to church address">
         </div>
 
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="currentTemplate().isCircuitEvent" name="isCircuitEvent">
+            Include in Circuit-Wide Events Calendar
+          </label>
+        </div>
+
         <div class="admin-modal-actions">
           <button type="button" class="btn secondary" (click)="isEditingTemplate.set(false)">Cancel</button>
           <button type="submit" class="btn primary" [disabled]="!templateForm.valid || selectedDays().length === 0">Save Pattern</button>
@@ -197,6 +204,13 @@
         <div class="form-group">
           <label>Description</label>
           <textarea [(ngModel)]="currentInstance().description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="currentInstance().isCircuitEvent" name="isCircuitEvent">
+            Include in Circuit-Wide Events Calendar
+          </label>
         </div>
 
         <div class="admin-modal-actions">

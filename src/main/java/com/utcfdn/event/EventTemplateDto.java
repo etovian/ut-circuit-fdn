@@ -1,5 +1,6 @@
 package com.utcfdn.event;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +24,10 @@ public class EventTemplateDto {
     private LocalTime startTime;
     private Integer durationMinutes;
     private String recurrenceRule;
+
+    @JsonProperty("isActive")
     private boolean isActive;
+
+    @JsonProperty("isCircuitEvent")
+    private boolean isCircuitEvent;
 }

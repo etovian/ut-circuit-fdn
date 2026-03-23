@@ -26,4 +26,7 @@ public interface ScheduledEventInstanceRepository extends JpaRepository<Schedule
 
     List<ScheduledEventInstanceEntity> findByStartTimeBetween(
             LocalDateTime start, LocalDateTime end);
+
+    List<ScheduledEventInstanceEntity> findByIsCircuitEventTrueAndStartTimeBetween(
+            LocalDateTime start, LocalDateTime end);
 }

@@ -41,6 +41,13 @@ public class EventController {
         return eventService.getScheduledInstances(congregationId, start, end);
     }
 
+    @GetMapping("/circuit/scheduled/next-thirty-days")
+    public List<EventOccurrenceDto> getCircuitScheduledEventsNextThirtyDays() {
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusDays(30);
+        return eventService.getCircuitScheduledInstances(start, end);
+    }
+
     // --- Administrative Endpoints ---
 
     @GetMapping("/templates")
