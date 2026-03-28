@@ -28,4 +28,20 @@ export class CongregationComponent {
     }
     return 'Utah';
   }
+
+  get streetAddress(): string {
+    if (this.congregation.addresses && this.congregation.addresses.length > 0) {
+      const addr = this.congregation.addresses[0].address;
+      return addr.streetAddress + (addr.addressLine2 ? ', ' + addr.addressLine2 : '');
+    }
+    return '';
+  }
+
+  get cityStateZip(): string {
+    if (this.congregation.addresses && this.congregation.addresses.length > 0) {
+      const addr = this.congregation.addresses[0].address;
+      return `${addr.city}, ${addr.state} ${addr.zipCode}`;
+    }
+    return this.city;
+  }
 }
