@@ -37,6 +37,20 @@
   background: var(--lcms-gold);
 }
 
+.distance-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--lcms-blue);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
 .card-accent.secondary {
   background: var(--gray-400);
 }

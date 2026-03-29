@@ -1,4 +1,7 @@
 <a [routerLink]="['/', slug]" class="hub-card">
+  @if (distance !== undefined) {
+    <div class="distance-badge">{{ distance | number:'1.0-1' }}mi</div>
+  }
   <div class="card-accent"></div>
   <h3>{{ congregation.name }}</h3>
   <p class="loc">

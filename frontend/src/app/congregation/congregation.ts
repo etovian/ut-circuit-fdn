@@ -12,6 +12,7 @@ import {Congregation} from './congregation.model';
 })
 export class CongregationComponent {
   @Input({required: true}) congregation!: Congregation;
+  @Input() distance?: number;
 
   get slug(): string {
     return this.congregation.name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');

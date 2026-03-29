@@ -18,8 +18,8 @@
       <h1>Utah Circuit</h1>
       <p>Connecting LCMS Congregations across the Beehive State</p>
       <div class="search-bar">
-        <input type="text" placeholder="Find a congregation...">
-        <button>Search</button>
+        <input type="text" [ngModel]="zipCode()" (ngModelChange)="zipCode.set($event)" placeholder="Enter Zip Code (e.g. 84101)">
+        <button (click)="onSearch()">Search</button>
       </div>
     </div>
   </header>
@@ -31,8 +31,11 @@
         <p>Faithful communities serving Utah families</p>
       </div>
       <div class="congregation-grid">
-        @for (congregation of congregations(); track congregation.id) {
-          <app-congregation-card [congregation]="congregation"></app-congregation-card>
+        @for (congregation of sortedCongregations(); track congregation.id) {
+          <app-congregation-card 
+            [congregation]="congregation" 
+            [distance]="distances()[congregation.id!]">
+          </app-congregation-card>
         }
       </div>
     </section>
